@@ -1,0 +1,46 @@
+from sensors import sensor
+from gui import colorFilterWidget as CFW
+import cv2
+import numpy as np
+
+class MyAlgorithm():
+	def __init__(self, sensor):
+		self.sensor = sensor
+		self.CFW = CFW
+      
+	def execute(self):
+		input_image = self.sensor.getImage()
+
+		if input_image != None:
+			#self.sensor.setColorImage(input_image)
+			
+			print("pre HSV")
+			hsv = cv2.cvtColor(input_image, cv2.COLOR_BGR2HSV)
+			print("post HSV")
+            
+			lower = np.array([50,140,50])
+			upper = np.array([120,255,255])
+			print("filtrado")
+	    
+			mask = cv2.inRange(hsv, lower, upper)
+			res = cv2.bitwise_and(input_image,input_image, mask= mask)
+			
+			res = cv2.cvtColor(res, cv2.COLOR_HSV2RGB)
+			
+			#contours, hierarchy = cv2.findContours(mask,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+		
+			#cnt = contours[0]
+			#M = cv2.moments(cnt)
+			#centroid_x = int(M['m10']/M['m00'])
+			#centroid_y = int(M['m01']/M['m00'])
+				
+		if res != None:
+			resrgb = cv2.cvtColor(res, cv2.COLOR_HSV2BGR)
+			print("muestra imagen filtrada")
+			self.sensor.setColorImage(resrgb)
+			
+		#self.sensor.sendCMDVel(1, 1, 0, 0, 0, 0)
+		if mask != None:
+			print("muestra masca")
+			self.sensor.setThresoldImage(mask)
+
