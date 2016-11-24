@@ -23,6 +23,10 @@ class MyAlgorithm():
 		zrefmax = 450.0
 		zrefmin = 350.0
 		zref = 400.0
+		roixmin = 225
+		roixmax = 425
+		roiymin = 150
+		roiymax = 350
 		
 		
 		#Check how many whites are in the pic
@@ -34,6 +38,7 @@ class MyAlgorithm():
 				for j in range(An):
 					if (img[i][j] != 0):
 						blancos = blancos + 1
+						
 			
 			return blancos
 		
@@ -54,6 +59,9 @@ class MyAlgorithm():
 				return ((float(blancos)-zref)/zref)
 			elif (blancos == zref ):
 				return 0
+				
+		def isValid(point, i):
+			return int(point[i][0][0]) >= roixmin and int(point[i][0][0]) <= roixmax and  int(point[i][0][1]) >= roiymin and int(point[i][0][1]) <= roiymax
 				
 		#Optical flow function
 		def flow(image):
@@ -88,17 +96,26 @@ class MyAlgorithm():
 						continue
 					line_thickness = 1
 					line_color = (255, 0, 0)
+					
+					
+					if isValid(p0,i) and isValid(p1,i):
+						p = (int(p0[i][0][0]), int(p0[i][0][1]))
+						q = (int(p1[i][0][0]), int(p1[i][0][1]))
 
-					p = (int(p0[i][0][0]), int(p0[i][0][1]))
-					q = (int(p1[i][0][0]), int(p1[i][0][1]))
-					print p
 
 					#angle = math.atan2(p[1]-q[1], p[0]-q[0])
 					#hypotenuse = math.sqrt(((p[1]-q[1])**2) + ((p[0]-q[0])**2))
 					
 					#q[0] = int(p[0]-1*hypotenuse*math.cos(angle))
 					#q[1] = int(p[1]-1*hypotenuse*math.cos(angle))
-					cv2.line(src, p, q, line_color, line_thickness, 0)
+						cv2.line(src, p, q, line_color, line_thickness, 0)
+						
+					cv2.rectangle(src, (roixmin, roiymin), (roixmax, roiymax), (0,255,0),2)
+					#cv2.line(src, (225, 150), (225,350), (0,255,0), 2, 0)
+					#cv2.line(src, (225, 150), (425,150), (0,255,0), 2, 0)
+					#cv2.line(src, (225, 350), (425,350), (0,255,0), 2, 0)
+					#cv2.line(src, (425, 150), (425,350), (0,255,0), 2, 0)
+					
 
 			image = src.copy()
 			previous = image.copy()
