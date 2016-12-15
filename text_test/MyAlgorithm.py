@@ -4,8 +4,14 @@ import cv2
 import numpy as np
 import math
 
+
 opflow_first = 1
 previous = None
+roixmin = 225
+roixmax = 425
+roiymin = 150
+roiymax = 350
+unpaired = 0
 
 class MyAlgorithm():
 	
@@ -17,57 +23,38 @@ class MyAlgorithm():
       
 	def execute(self):
 		input_image = self.sensor.getImage()
-		#Renference values
-		imgcentery = 130.0
-		imgcenterx = 145.0
-		zrefmax = 450.0
-		zrefmin = 350.0
-		zref = 400.0
-		roixmin = 225
-		roixmax = 425
-		roiymin = 150
-		roiymax = 350
 		
-		
-		#Check how many whites are in the pic
-		def chkImg(img):
-			Al = len(img)
-			An = len(img[0])
-			blancos = 0
-			for i in range(Al):
-				for j in range(An):
-					if (img[i][j] != 0):
-						blancos = blancos + 1
-						
-			
-			return blancos
-		
-		#Check if the whites in-pic is upper than the threshold	
-		def isDark(img):
-			wh = chkImg(img)
-			
-			return (wh < 31)
-			
-		#Check the whites in-pic and adjust the height to the threshold
-		def setHeight(img):
-			
-			blancos = chkImg(img)
-			
-			if (blancos < zrefmin):
-				return ((float(blancos)-zref)/zref)
-			elif (blancos > zrefmax):
-				return ((float(blancos)-zref)/zref)
-			elif (blancos == zref ):
-				return 0
-				
+		#Check if the point is inside a ROI	
 		def isValid(point, i):
-			return int(point[i][0][0]) >= roixmin and int(point[i][0][0]) <= roixmax and  int(point[i][0][1]) >= roiymin and int(point[i][0][1]) <= roiymax
+			return int(point[i][0][0]) >= roixmin and int(point[i][0][0]) <= roixmax and  int(point[i][0][1]) >= roiymin and int(point[i][0][1]) <= roiymax 
+			
+		#Check if the vector is longer than a threshold
+		def isVector(point0, point1, i):
+			return (math.sqrt(((point1[i][0][0]-point0[i][0][0])**2)+((point1[i][0][1]-point0[i][0][1])**2))) > 5 and (math.sqrt(((point1[i][0][0]-point0[i][0][0])**2)+((point1[i][0][1]-point0[i][0][1])**2))) < 30
+			
+		#Check if the ROI is small than a size
+		def smallROI(xmax,xmin,ymax,ymin):
+		 return (xmax - xmin) < 10 or (ymax - ymin) < 10 
+		 
+		def setROI (event, x, y):
+			global roixmin, roiymin, roixmax, roiymax
+			print(event)
+			
+			if event == cv2.EVENT_LBUTTONDOWN:
+				roixmin = x
+				roiymin = y
+			elif event == cv2.EVENT_LBUTTONUP:
+				roixmax = x
+				roiymax = y
+		  
 				
 		#Optical flow function
 		def flow(image):
-			global opflow_first
-			global previous
+			global opflow_first, previous, roixmin, roiymin, roixmax, roiymax, unpaired
+			
 			src = image.copy()
+			unpaired = 0
+				
 			if (opflow_first):
 				if (previous == None):
 					previous = src.copy()
@@ -79,64 +66,57 @@ class MyAlgorithm():
 			lk_params = dict(winSize  = (31,31), maxLevel = 5, criteria = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 20, 0.03))
 
 			img1 =cv2.cvtColor(previous, cv2.COLOR_BGR2GRAY)
-			img1= cv2.blur(img1,(5,5))
+			#img1= cv2.blur(img1,(5,5))
 			img2 =cv2.cvtColor(src, cv2.COLOR_BGR2GRAY)
-			img2= cv2.blur(img2,(5,5))
+			#img2= cv2.blur(img2,(5,5))
 			
 			numpoints = 90
 			
 			p0 = cv2.goodFeaturesToTrack(img1, numpoints, .01, .01)
 			
 			if (len(p0)>0):
-				cv2.cornerSubPix(img1, p0, (15,15), (-1,-1), criteria)
+				#cv2.cornerSubPix(img1, p0, (15,15), (-1,-1), criteria)
 				p1, st, error = cv2.calcOpticalFlowPyrLK(img1, img2, p0, None, **lk_params)
+
 
 				for i in range(numpoints):
 					if (st[i] == 0):
-						continue
-					line_thickness = 1
-					line_color = (255, 0, 0)
-					
-					
-					if isValid(p0,i) and isValid(p1,i):
 						p = (int(p0[i][0][0]), int(p0[i][0][1]))
 						q = (int(p1[i][0][0]), int(p1[i][0][1]))
-
-
-					#angle = math.atan2(p[1]-q[1], p[0]-q[0])
-					#hypotenuse = math.sqrt(((p[1]-q[1])**2) + ((p[0]-q[0])**2))
+						unpaired = unpaired + 1
+						cv2.circle(src, p, 5, (255,255,0), -1)
+						cv2.circle(src, q, 5, (0,255,255), -1)
 					
-					#q[0] = int(p[0]-1*hypotenuse*math.cos(angle))
-					#q[1] = int(p[1]-1*hypotenuse*math.cos(angle))
-						cv2.line(src, p, q, line_color, line_thickness, 0)
+					line_thickness = 1
+					line_color = (0, 0, 255)
+					
+					
+					p = (int(p0[i][0][0]), int(p0[i][0][1]))
+					q = (int(p1[i][0][0]), int(p1[i][0][1]))
+					cv2.circle(src, p, 5, (0,255,0), -1)
+					cv2.circle(src, q, 5, (255,0,0), -1)
+					cv2.line(src, p, q, line_color, line_thickness, 0)
 						
-					cv2.rectangle(src, (roixmin, roiymin), (roixmax, roiymax), (0,255,0),2)
-					#cv2.line(src, (225, 150), (225,350), (0,255,0), 2, 0)
-					#cv2.line(src, (225, 150), (425,150), (0,255,0), 2, 0)
-					#cv2.line(src, (225, 350), (425,350), (0,255,0), 2, 0)
-					#cv2.line(src, (425, 150), (425,350), (0,255,0), 2, 0)
-					
 
-			image = src.copy()
+			
 			previous = image.copy()
 			
 			del img1
 			del img2
-			del src
 			
-			return image
+			
+			return src
 			
 			
 
 		#Algorythm
 		if input_image != None:
-			
-			
+	
 			res = flow(input_image)
-			
+			font = cv2.FONT_HERSHEY_SIMPLEX
+			cv2.putText(res,str(unpaired), (40,100),font,2,(255,255,255),2)
 		
 		if res != None:
-			print("alright!")
 			self.sensor.setColorImage(res)
 			
 		
