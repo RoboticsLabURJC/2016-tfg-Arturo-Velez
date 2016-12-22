@@ -3,6 +3,8 @@ from gui import colorFilterWidget as CFW
 import cv2
 import numpy as np
 import math
+from PyQt4 import QtGui, QtCore
+
 
 
 opflow_first = 1
@@ -12,18 +14,19 @@ roixmax = 425
 roiymin = 150
 roiymax = 350
 unpaired = 0
+numpoints = 90
 
-class MyAlgorithm():
+class MyAlgorithm(QtGui.QWidget):
 	
 	def __init__(self, sensor):
 		self.sensor = sensor
 		self.CFW = CFW
-	
-				
+ 				
       
 	def execute(self):
 		input_image = self.sensor.getImage()
 		
+
 		#Check if the point is inside a ROI	
 		def isValid(point, i):
 			return int(point[i][0][0]) >= roixmin and int(point[i][0][0]) <= roixmax and  int(point[i][0][1]) >= roiymin and int(point[i][0][1]) <= roiymax 
@@ -32,6 +35,22 @@ class MyAlgorithm():
 		def isVector(point0, point1, i):
 			return (math.sqrt(((point1[i][0][0]-point0[i][0][0])**2)+((point1[i][0][1]-point0[i][0][1])**2))) > 5 and (math.sqrt(((point1[i][0][0]-point0[i][0][0])**2)+((point1[i][0][1]-point0[i][0][1])**2))) < 30
 			
+		#Check the outer point
+		def outPt (points, c):
+			maxPt = points[0][0][c]
+			minPt = points[0][0][c]
+			minPtindex = 0
+			maxPtindex = 0
+			for i in range(numpoints):
+				if isValid(points, i):
+					if maxPt < points[i][0][c]:
+						maxPt = points[i][0][c]
+						maxPtindex = i
+					if minPt > points[i][0][c]:
+						minPt = points[i][0][c]
+						minPtindex = i
+			return maxPt, minPt, minPtindex, maxPtindex 
+			 	
 		#Check if the ROI is small than a size
 		def smallROI(xmax,xmin,ymax,ymin):
 		 return (xmax - xmin) < 10 or (ymax - ymin) < 10 
@@ -70,14 +89,22 @@ class MyAlgorithm():
 			img2 =cv2.cvtColor(src, cv2.COLOR_BGR2GRAY)
 			#img2= cv2.blur(img2,(5,5))
 			
-			numpoints = 90
+			
 			
 			p0 = cv2.goodFeaturesToTrack(img1, numpoints, .01, .01)
+			#Max and min point: 0 for x axis, 1 for y axis
+			roixmax, roixmin, xindexmin, xindexmax  = outPt(p0, 0)
+			roiymax, roiymin, yindexmin, yindexmax = outPt(p0, 1)
+		
+			print(xindexmax, xindexmin, yindexmax, yindexmin)
+			
+			
+			
+  
 			
 			if (len(p0)>0):
 				#cv2.cornerSubPix(img1, p0, (15,15), (-1,-1), criteria)
 				p1, st, error = cv2.calcOpticalFlowPyrLK(img1, img2, p0, None, **lk_params)
-
 
 				for i in range(numpoints):
 					if (st[i] == 0):
@@ -93,11 +120,17 @@ class MyAlgorithm():
 					
 					p = (int(p0[i][0][0]), int(p0[i][0][1]))
 					q = (int(p1[i][0][0]), int(p1[i][0][1]))
-					cv2.circle(src, p, 5, (0,255,0), -1)
-					cv2.circle(src, q, 5, (255,0,0), -1)
-					cv2.line(src, p, q, line_color, line_thickness, 0)
-						
 
+					if i == xindexmax or i == yindexmax or i == yindexmin or i == xindexmin:
+						cv2.circle(src, p, 5, (0,0,255), -1)
+						cv2.circle(src, q, 5, (255,255,255), -1)
+						cv2.line(src, p, q, line_color, line_thickness, 0)
+					else:	
+						cv2.circle(src, p, 5, (0,255,0), -1)
+						cv2.circle(src, q, 5, (255,0,0), -1)
+						cv2.line(src, p, q, line_color, line_thickness, 0)
+						
+			cv2.rectangle(src, (roixmin,roiymin), (roixmax,roiymax), (0,255,0), thickness=2, lineType=8, shift=0)
 			
 			previous = image.copy()
 			

@@ -119,7 +119,7 @@ class Ui_MainWindow(object):
         self.windowsLabel.setText(_translate("MainWindow", "Windows:", None))
         self.cameraCheck.setText(_translate("MainWindow", "Camera", None))
         self.sensorsCheck.setText(_translate("MainWindow", "Sensors", None))
-        self.colorFilterCheck.setText(_translate("MainWindow", "Motion Detect", None))
+        self.colorFilterCheck.setText(_translate("MainWindow", "Color filter", None))
         self.altdLabel.setText(_translate("MainWindow", "Altitude", None))
         self.rotationLabel.setText(_translate("MainWindow", "Rotation", None))
         self.XLabel.setText(_translate("MainWindow", "X:", None))
