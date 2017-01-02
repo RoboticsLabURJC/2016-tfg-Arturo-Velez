@@ -22,7 +22,7 @@ class MyAlgorithm(QtGui.QWidget):
 		self.sensor = sensor
 		self.CFW = CFW
  				
-      
+  
 	def execute(self):
 		input_image = self.sensor.getImage()
 		
@@ -41,7 +41,7 @@ class MyAlgorithm(QtGui.QWidget):
 			minPt = points[0][0][c]
 			minPtindex = 0
 			maxPtindex = 0
-			for i in range(numpoints):
+			for i in range(len(points)):
 				if isValid(points, i):
 					if maxPt < points[i][0][c]:
 						maxPt = points[i][0][c]
@@ -52,21 +52,38 @@ class MyAlgorithm(QtGui.QWidget):
 			return maxPt, minPt, minPtindex, maxPtindex 
 			 	
 		#Check if the ROI is small than a size
-		def smallROI(xmax,xmin,ymax,ymin):
-		 return (xmax - xmin) < 10 or (ymax - ymin) < 10 
-		 
-		def setROI (event, x, y):
+		def smallROI(xmax, xmin, ymax, ymin):
+
+			return ((xmax - xmin) < 20 or (ymax - ymin) < 20)
+
+		def setROI():
 			global roixmin, roiymin, roixmax, roiymax
-			print(event)
 			
-			if event == cv2.EVENT_LBUTTONDOWN:
-				roixmin = x
-				roiymin = y
-			elif event == cv2.EVENT_LBUTTONUP:
-				roixmax = x
-				roiymax = y
-		  
+			roixmin = 225
+			roixmax = 425
+			roiymin = 150
+			roiymax = 350
+
+
+		def resizeROI(pt0,pt1,imax,imin,c):
+			if c == 0:
+				roimin = roixmin
+				roimax = roixmax
+			elif c == 1:
+				roimin = roiymin
+				roimax = roiymax
+			
+			if pt1[imin][0][c] < roimin:
+				roimin = pt1[imin][0][c]
+			if pt1[imax][0][c] > roimax:
+				roimax = pt1[imax][0][c]
+			if pt1[imin][0][c] > roimin:
+				roimin = pt0[imin][0][c]
+			if pt1[imax][0][c] < roimax:
+				roimax = pt0[imax][0][c]
 				
+			return roimax, roimin
+
 		#Optical flow function
 		def flow(image):
 			global opflow_first, previous, roixmin, roiymin, roixmax, roiymax, unpaired
@@ -81,8 +98,8 @@ class MyAlgorithm(QtGui.QWidget):
 					del src
 					return
 
-			criteria = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 20, 0.03)
 			lk_params = dict(winSize  = (31,31), maxLevel = 5, criteria = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 20, 0.03))
+			criteria = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 20, 0.03)
 
 			img1 =cv2.cvtColor(previous, cv2.COLOR_BGR2GRAY)
 			#img1= cv2.blur(img1,(5,5))
@@ -93,18 +110,21 @@ class MyAlgorithm(QtGui.QWidget):
 			
 			p0 = cv2.goodFeaturesToTrack(img1, numpoints, .01, .01)
 			#Max and min point: 0 for x axis, 1 for y axis
-			roixmax, roixmin, xindexmin, xindexmax  = outPt(p0, 0)
-			roiymax, roiymin, yindexmin, yindexmax = outPt(p0, 1)
+			
+			maxXpt, minXpt, xindexmin, xindexmax  = outPt(p0, 0)
+			maxYpt, minYpt, yindexmin, yindexmax = outPt(p0, 1)
 		
-			print(xindexmax, xindexmin, yindexmax, yindexmin)
 			
-			
-			
-  
 			
 			if (len(p0)>0):
 				#cv2.cornerSubPix(img1, p0, (15,15), (-1,-1), criteria)
 				p1, st, error = cv2.calcOpticalFlowPyrLK(img1, img2, p0, None, **lk_params)
+				 
+				roixmax, roixmin = resizeROI(p0,p1,xindexmax,xindexmin, 0)
+				roiymax, roiymin = resizeROI(p0,p1,yindexmax,yindexmin, 1)
+
+				if smallROI(roixmax, roixmin, roiymax, roiymin):
+					setROI()
 
 				for i in range(numpoints):
 					if (st[i] == 0):
@@ -121,12 +141,12 @@ class MyAlgorithm(QtGui.QWidget):
 					p = (int(p0[i][0][0]), int(p0[i][0][1]))
 					q = (int(p1[i][0][0]), int(p1[i][0][1]))
 
-					if i == xindexmax:
+					if i == xindexmax or i == yindexmax or i == yindexmin or i == xindexmin:
 						cv2.circle(src, p, 5, (0,0,255), -1)
 						cv2.circle(src, q, 5, (255,255,255), -1)
 						cv2.line(src, p, q, line_color, line_thickness, 0)
 					else:	
-						cv2.circle(src, p, 5, (0,255,), -1)
+						cv2.circle(src, p, 5, (0,255,0), -1)
 						cv2.circle(src, q, 5, (255,0,0), -1)
 						cv2.line(src, p, q, line_color, line_thickness, 0)
 						
