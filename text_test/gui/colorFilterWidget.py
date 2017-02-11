@@ -17,94 +17,82 @@
 #       Alberto Martin Florido <almartinflorido@gmail.com>
 #
 
-from PyQt4 import QtGui,QtCore
+from PyQt5.QtCore import QSize, QPoint, Qt
+from PyQt5.QtGui import (QBrush, QPainter, QPen, QPixmap, QColor)
+from PyQt5.QtWidgets import (QApplication, QVBoxLayout, QWidget)
 import cv2
 import os
 
-refPt = []
 
 class ColorFilterWidget(QtGui.QWidget):
-    IMAGE_COLS_MAX=640
-    IMAGE_ROWS_MAX=360
-    
-    imageUpdate=QtCore.pyqtSignal()
-    
+
+	IMAGE_COLS_MAX=640
+	IMAGE_ROWS_MAX=360
+	imageUpdate=QtCore.pyqtSignal()
+
     def __init__(self,winParent):      
-        super(ColorFilterWidget, self).__init__()
-        self.winParent=winParent
-        self.imageUpdate.connect(self.updateImage)
-        self.initUI()
-        
 
-		 
-    def initUI(self):
+		super(ColorFilterWidget, self).__init__()
+		self.winParent=winParent
 
-		self.setWindowTitle("Motion Detect")
+		self.imageUpdate.connect(self.updateImage)
+		mainLayout = QVBoxLayout()
 
-		self.setMinimumSize(680,400)
-		self.setMaximumSize(680,400)
+		self.setMouseTracking(False)
+		self.setMinimumSize(QSize(640,480))	
+		self.setLayout(mainLayout)
+		self.setWindowTitle("Basic ROI")
 
-		self.imgLabelColor=QtGui.QLabel(self)
-		self.imgLabelColor.resize(self.IMAGE_COLS_MAX,self.IMAGE_ROWS_MAX)
+		self.startPoint = QPoint(-10,-10)
+		self.endPoint = QPoint(-10,-10)
 
+	def mousePressEvent(self, event):
 
-		self.imgLabelColor.show()
+		if(event.buttons() == Qt.LeftButton): 	# Si se ha pulsado el boton izquierdo
 
-        #self.imgLabelBlackWhite=QtGui.QLabel(self)
-        #self.imgLabelBlackWhite.resize(self.IMAGE_COLS_MAX,self.IMAGE_ROWS_MAX)
-        #self.imgLabelBlackWhite.move(40 + self.IMAGE_COLS_MAX,20)
-        #self.imgLabelBlackWhite.show()
+			print("Left pressed")
+			self.startPoint.setX(event.x())
+			self.startPoint.setY(event.y())
 
+		if(event.buttons() == Qt.RightButton):	# Si se ha pulsado el boton derecho
 
-               
-    def setColorImage(self):
-        img = self.winParent.getSensor().getColorImage()
-
-        if img != None:
-            image = QtGui.QImage(img.data, img.shape[1], img.shape[0], img.shape[1] * img.shape[2], QtGui.QImage.Format_RGB888)
-            
-            if img.shape[1] == self.IMAGE_COLS_MAX:
-            	x = 20
-            else:
-            	x=(self.IMAGE_COLS_MAX+20)/2-(img.shape[1]/2)
-            	
-            if img.shape[0] == self.IMAGE_ROWS_MAX:
-            	y = 20
-            else:
-	        y=(self.IMAGE_ROWS_MAX+40)/2-(img.shape[0]/2)
-	        
-            size=QtCore.QSize(img.shape[1],img.shape[0])
-            self.imgLabelColor.move(x,y)
-            self.imgLabelColor.resize(size)
-            self.imgLabelColor.setPixmap(QtGui.QPixmap.fromImage(image))          
+			self.startPoint = QPoint(-10,-10)
+			self.endPoint = QPoint(-10,-10)
+			self.update()	# se llama a PaintEvent para que se borre el ROI que hubiera
 
 
-		   
-#    def setThresoldImage(self):
-#        img = self.winParent.getSensor().getThresoldImage()
-#
-#        if img != None:
-#            image = QtGui.QImage(img.data, img.shape[1], img.shape[0], img.shape[1], QtGui.QImage.Format_Indexed8)
-#            
-#            if img.shape[1] == self.IMAGE_COLS_MAX:
-#            	x = 40 + self.IMAGE_COLS_MAX
-#            else:
-#            	x= 40 + self.IMAGE_COLS_MAX + ((self.IMAGE_COLS_MAX+20)/2-(img.shape[1]/2))
-#            	
-#            if img.shape[0] == self.IMAGE_ROWS_MAX:
-#            	y = 20
-#            else:
-#	        y=(self.IMAGE_ROWS_MAX+40)/2-(img.shape[0]/2)   
-#	        
-#            size=QtCore.QSize(img.shape[1],img.shape[0])
-#            self.imgLabelBlackWhite.move(x,y)
-#            self.imgLabelBlackWhite.resize(size)
-#            self.imgLabelBlackWhite.setPixmap(QtGui.QPixmap.fromImage(image))     	                 
-           
+	def mouseReleaseEvent(self, event):
 
-    def updateImage(self):
-        self.setColorImage()
-#        self.setThresoldImage()
-        
-    def closeEvent(self, event):
-        self.winParent.closeColorFilterWidget()
+		print("released")
+		self.endPoint.setX(event.x())
+		self.endPoint.setY(event.y())
+		print(self.startPoint, self.endPoint)
+
+	def mouseMoveEvent(self, event):
+
+		print("Mouse moved")
+		self.endPoint.setX(event.x())
+		self.endPoint.setY(event.y())
+		self.update()	# Repintamos cada vez que el ratÛn se mueva.
+
+	def closeEvent(self, event):
+
+		event.accept()
+
+	def setColorImage(self):
+
+		img = self.winParent.getSensor().getColorImage()
+		painter = QPainter(self)
+
+		if img != None:
+
+ 			image = QtGui.QImage(img.data, img.shape[1], img.shape[0], img.shape[1] * img.shape[2], QtGui.QImage.Format_RGB888)
+			painter.drawPixmap(0,0,640,480,QPixmap("image"))       		
+
+	def updateImage(self):
+
+		self.setColorImage()
+
+	def closeEvent(self, event):
+
+ 		self.winParent.closeColorFilterWidget()
