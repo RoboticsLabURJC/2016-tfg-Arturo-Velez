@@ -61,12 +61,12 @@ class Sensor:
                 self.thresoldImage.shape = self.height, self.width,
 
             else:
-                print 'Interface camera not connected'
+                print('Interface camera not connected')
 
             basecmdVel = ic.propertyToProxy("Introrob.CMDVel.Proxy")
             self.cmdVelProxy=jderobot.CMDVelPrx.checkedCast(basecmdVel)
             if not self.cmdVelProxy:
-                print 'Interface cmdVel not connected'
+                print('Interface cmdVel not connected')
 
             basenavdata = ic.propertyToProxy("Introrob.Navdata.Proxy")
             self.navdataProxy = jderobot.NavdataPrx.checkedCast(basenavdata)
@@ -78,20 +78,20 @@ class Sensor:
                 else:
                     self.virtualDrone = False
             else:
-                print 'Interface navdata not connected'
+                print('Interface navdata not connected')
                 self.virtualDrone = True
 
             baseextra = ic.propertyToProxy("Introrob.Extra.Proxy")
             self.extraProxy=jderobot.ArDroneExtraPrx.checkedCast(baseextra)
             if not self.extraProxy:
-                print 'Interface ardroneExtra not connected'
+                print('Interface ardroneExtra not connected')
 
             basepose3D = ic.propertyToProxy("Introrob.Pose3D.Proxy")
             self.pose3DProxy=jderobot.Pose3DPrx.checkedCast(basepose3D)
             if self.pose3DProxy:
                 self.pose=jderobot.Pose3DData()
             else:
-                print 'Interface pose3D not connected'
+                print('Interface pose3D not connected')
 
         except:
             traceback.print_exc()

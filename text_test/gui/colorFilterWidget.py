@@ -17,20 +17,20 @@
 #       Alberto Martin Florido <almartinflorido@gmail.com>
 #
 
-from PyQt5.QtCore import QSize, QPoint, Qt
+from PyQt5.QtCore import QSize, QPoint, Qt, pyqtSignal
 from PyQt5.QtGui import (QBrush, QPainter, QPen, QPixmap, QColor)
 from PyQt5.QtWidgets import (QApplication, QVBoxLayout, QWidget)
 import cv2
 import os
 
 
-class ColorFilterWidget(QtGui.QWidget):
+class ColorFilterWidget(QWidget):
 
 	IMAGE_COLS_MAX=640
 	IMAGE_ROWS_MAX=360
-	imageUpdate=QtCore.pyqtSignal()
+	imageUpdate=pyqtSignal()
 
-    def __init__(self,winParent):      
+	def __init__(self,winParent):      
 
 		super(ColorFilterWidget, self).__init__()
 		self.winParent=winParent
@@ -86,7 +86,7 @@ class ColorFilterWidget(QtGui.QWidget):
 
 		if img != None:
 
- 			image = QtGui.QImage(img.data, img.shape[1], img.shape[0], img.shape[1] * img.shape[2], QtGui.QImage.Format_RGB888)
+			image = QtGui.QImage(img.data, img.shape[1], img.shape[0], img.shape[1] * img.shape[2], QtGui.QImage.Format_RGB888)
 			painter.drawPixmap(0,0,640,480,QPixmap("image"))       		
 
 	def updateImage(self):
@@ -95,4 +95,4 @@ class ColorFilterWidget(QtGui.QWidget):
 
 	def closeEvent(self, event):
 
- 		self.winParent.closeColorFilterWidget()
+		self.winParent.closeColorFilterWidget()
