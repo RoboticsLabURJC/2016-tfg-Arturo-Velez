@@ -17,82 +17,46 @@
 #       Alberto Martin Florido <almartinflorido@gmail.com>
 #
 
-from PyQt5.QtCore import QSize, QPoint, Qt, pyqtSignal
-from PyQt5.QtGui import (QBrush, QPainter, QPen, QPixmap, QColor)
-from PyQt5.QtWidgets import (QApplication, QVBoxLayout, QWidget)
-import cv2
-import os
-
+from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtWidgets import QWidget, QLabel
+from PyQt5.QtGui import QImage, QPixmap
 
 class ColorFilterWidget(QWidget):
+    IMAGE_COLS_MAX=640
+    IMAGE_ROWS_MAX=360
+    
+    imageUpdate=pyqtSignal()
+    
+    def __init__(self,winParent):      
+        super(ColorFilterWidget, self).__init__()
+        self.winParent=winParent
+        self.imageUpdate.connect(self.updateImage)
+        self.initUI()
+        
+    def initUI(self):
 
-	IMAGE_COLS_MAX=640
-	IMAGE_ROWS_MAX=360
-	imageUpdate=pyqtSignal()
+        self.setWindowTitle("Color filter")
 
-	def __init__(self,winParent):      
+        self.setMinimumSize(680,400)
+        self.setMaximumSize(680,400)
 
-		super(ColorFilterWidget, self).__init__()
-		self.winParent=winParent
-
-		self.imageUpdate.connect(self.updateImage)
-		mainLayout = QVBoxLayout()
-
-		self.setMouseTracking(False)
-		self.setMinimumSize(QSize(640,480))	
-		self.setLayout(mainLayout)
-		self.setWindowTitle("Basic ROI")
-
-		self.startPoint = QPoint(-10,-10)
-		self.endPoint = QPoint(-10,-10)
-
-	def mousePressEvent(self, event):
-
-		if(event.buttons() == Qt.LeftButton): 	# Si se ha pulsado el boton izquierdo
-
-			print("Left pressed")
-			self.startPoint.setX(event.x())
-			self.startPoint.setY(event.y())
-
-		if(event.buttons() == Qt.RightButton):	# Si se ha pulsado el boton derecho
-
-			self.startPoint = QPoint(-10,-10)
-			self.endPoint = QPoint(-10,-10)
-			self.update()	# se llama a PaintEvent para que se borre el ROI que hubiera
+        self.imgLabelColor=QLabel(self)
+        self.imgLabelColor.resize(self.IMAGE_COLS_MAX,self.IMAGE_ROWS_MAX)
+        self.imgLabelColor.move(20,20)
+        self.imgLabelColor.show()
 
 
-	def mouseReleaseEvent(self, event):
+    def setColorImage(self):
+        img = self.winParent.getCamera().getColorImage()
 
-		print("released")
-		self.endPoint.setX(event.x())
-		self.endPoint.setY(event.y())
-		print(self.startPoint, self.endPoint)
+        if img is not None:
+            image = QImage(img.data, img.shape[1], img.shape[0], img.shape[1] * img.shape[2], QImage.Format_RGB888)
+            self.imgLabelColor.setPixmap(QPixmap.fromImage(image))
 
-	def mouseMoveEvent(self, event):
+        
+    def updateImage(self):
+        self.setColorImage()
 
-		print("Mouse moved")
-		self.endPoint.setX(event.x())
-		self.endPoint.setY(event.y())
-		self.update()	# Repintamos cada vez que el ratÛn se mueva.
-
-	def closeEvent(self, event):
-
-		event.accept()
-
-	def setColorImage(self):
-
-		img = self.winParent.getSensor().getColorImage()
-		painter = QPainter(self)
-
-		if img != None:
-
-			image = QtGui.QImage(img.data, img.shape[1], img.shape[0], img.shape[1] * img.shape[2], QtGui.QImage.Format_RGB888)
-			painter.drawPixmap(0,0,640,480,QPixmap("image"))       		
-
-	def updateImage(self):
-
-		self.setColorImage()
-
-	def closeEvent(self, event):
-
-		self.winParent.closeColorFilterWidget()
+        
+    def closeEvent(self, event):
+        self.winParent.closeColorFilterWidget()

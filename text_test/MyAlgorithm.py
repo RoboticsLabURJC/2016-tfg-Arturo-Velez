@@ -14,16 +14,19 @@ from parallelIce.pose3dClient import Pose3DClient
 
 opflow_first = 1
 previous = None
-roixmin = 225
-roixmax = 425
-roiymin = 150
-roiymax = 350
+refPt = []
 unpaired = 0
 numpoints = 90
+croppingExt = False
+lin = np.zeros((360,640), np.uint8)
+
+cut = False
+
 
 time_cycle = 80
 
 class MyAlgorithm(threading.Thread):
+	global lin
 
 	def __init__(self, camera, navdata, pose, cmdvel, extra):
 		self.camera = camera
@@ -68,6 +71,37 @@ class MyAlgorithm(threading.Thread):
 	def kill (self):
 		self.kill_event.set()
 
+	def click_and_crop(self, event, x, y, flags, param):
+		# referencias del grab a las variables globales
+		global refPt, croppingExt, refMov, lin
+		# Si el boton izquierdo del raton se pulsa, graba los primeros (x,y) e indica que el corte (cropping) se esta
+		# realizando
+		if event == cv2.EVENT_LBUTTONDOWN:
+			refPt = [(x, y)]
+			refMov = [(x, y)]
+			croppingExt = True
+		# Mira a ver si el boton izquierdo ha dejado de presionarse
+		elif event == cv2.EVENT_LBUTTONUP:
+			# guarda las coordenadas finales (x ,y) e indica que el corte (cropping) se ha acabado
+			refPt.append((x, y))
+			croppingExt = False
+			# Dentro de este elif dibujo un rectangulo alrededor de la region de interes
+			lin = np.zeros((360, 640), dtype=np.uint8)
+			cv2.rectangle(lin, refPt[0], refPt[1], 255, 2)
+			print("En click")			
+			print(len(refPt))
+	
+		if (event == cv2.EVENT_MOUSEMOVE) and (croppingExt == True):
+			if len(refMov) == 1:
+				refMov.append((x, y))
+				lin = np.zeros((360, 640), dtype=np.uint8)
+				cv2.rectangle(lin, refMov[0], refMov[1], 255, 2)
+
+			elif len(refMov) == 2:
+				refMov[1] = ((x, y))
+				lin = np.zeros((360, 640), dtype=np.uint8)
+				cv2.rectangle(lin, refMov[0], refMov[1], 255, 2)
+
 	def execute(self):
 		input_image = self.camera.getImage()
 		
@@ -99,15 +133,39 @@ class MyAlgorithm(threading.Thread):
 		#Check if the ROI is small than a size
 		def smallROI(xmax, xmin, ymax, ymin):
 
-			return ((xmax - xmin) < 20 or (ymax - ymin) < 20)
+			return ((xmax - xmin) < 20 or (ymax - ymin) < 20)  
 
 		def setROI():
-			global roixmin, roiymin, roixmax, roiymax
+			global roixmin, roiymin, roixmax, roiymax, cut, refPt
 			
-			roixmin = 225
-			roixmax = 425
-			roiymin = 150
-			roiymax = 350
+			frame1 = self.camera.getImage()
+			gray_frame1 = cv2.cvtColor(frame1, cv2.COLOR_BGR2GRAY)
+			gray_frame1 = gray_frame1[60:420, 0:640]
+			img = cv2.add(gray_frame1, lin)
+			if not cut:			
+				cv2.imshow('ROI SELECTION', img)
+				cv2.setMouseCallback('ROI SELECTION', self.click_and_crop)
+
+
+			while (not cut):
+				frame = self.camera.getImage()
+				gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+				gray_frame = gray_frame[60:420, 0:640]
+				img_tru = cv2.add(gray_frame, lin)
+				cv2.imshow('ROI SELECTION', img_tru)
+				key = cv2.waitKey(1) & 0xFF
+				if len(refPt) == 2 and not cut:
+					cv2.destroyWindow('ROI SELECTION')
+					cut = True
+					break
+				else:
+					continue
+
+			
+			roixmin= refPt[0][0]
+			roiymin = refPt[0][1]
+			roixmax = refPt[1][0]
+			roiymax = refPt[1][1]
 
 
 		def resizeROI(pt0,pt1,imax,imin,c):
@@ -129,9 +187,21 @@ class MyAlgorithm(threading.Thread):
 				
 			return roimax, roimin
 
+		def lowPoints(xmax,xmin,ymax,ymin,points):
+			count = 0			
+			for i in range(len(points)):
+				if points[i][0][0] < xmin or points[i][0][0] > xmax or points[i][0][1] < ymin or points[i][0][1] > ymax:
+					count = count + 1
+			
+			return count < 20
+
 		#Optical flow function
 		def flow(image):
-			global opflow_first, previous, roixmin, roiymin, roixmax, roiymax, unpaired
+			global opflow_first, previous, roixmin, roiymin, roixmax, roiymax, unpaired,lin,  refMov, cut,refPt
+			setROI()
+			print("init")
+			print(refPt)
+			print(roixmin, roiymin, roixmax, roiymax)
 			
 			src = image.copy()
 			unpaired = 0
@@ -168,8 +238,6 @@ class MyAlgorithm(threading.Thread):
 				roixmax, roixmin = resizeROI(p0,p1,xindexmax,xindexmin, 0)
 				roiymax, roiymin = resizeROI(p0,p1,yindexmax,yindexmin, 1)
 
-				if smallROI(roixmax, roixmin, roiymax, roiymin):
-					setROI()
 
 				for i in range(len(p1)):
 					if (st[i] == 0):
@@ -198,6 +266,15 @@ class MyAlgorithm(threading.Thread):
 			cv2.rectangle(src, (roixmin,roiymin), (roixmax,roiymax), (0,255,0), thickness=2, lineType=8, shift=0)
 			
 			previous = image.copy()
+
+			if smallROI(roixmax, roixmin, roiymax, roiymin): 
+					cut = False
+					print("pre")
+					print(refPt)
+					refPt = []					
+					setROI()
+					print("post")
+					print(refPt)
 			
 			del img1
 			del img2
