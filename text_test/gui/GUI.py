@@ -25,7 +25,7 @@ from gui.ui_gui import Ui_MainWindow
 from gui.teleopWidget import TeleopWidget
 from gui.cameraWidget import CameraWidget
 from gui.communicator import Communicator
-from gui.sensorsWidget import SensorsWidget
+#from gui.sensorsWidget import SensorsWidget
 from gui.colorFilterWidget import  ColorFilterWidget
 from gui.logoWidget import LogoWidget
 
@@ -48,14 +48,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.updGUI.connect(self.updateGUI)
         
         self.cameraCheck.stateChanged.connect(self.showCameraWidget)
-        self.sensorsCheck.stateChanged.connect(self.showSensorsWidget)
+        #self.sensorsCheck.stateChanged.connect(self.showSensorsWidget)
         self.colorFilterCheck.stateChanged.connect(self.showColorFilterWidget)
         
         self.rotationDial.valueChanged.connect(self.rotationChange)
         self.altdSlider.valueChanged.connect(self.altitudeChange)
         
         self.cameraWidget=CameraWidget(self)
-        self.sensorsWidget=SensorsWidget(self)
+        #self.sensorsWidget=SensorsWidget(self)
         self.colorFilterWidget=ColorFilterWidget(self)
 
         self.cameraCommunicator=Communicator()
@@ -107,7 +107,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     
     def updateGUI(self):
         self.cameraWidget.imageUpdate.emit()
-        self.sensorsWidget.sensorsUpdate.emit()
+        #self.sensorsWidget.sensorsUpdate.emit()
         self.colorFilterWidget.imageUpdate.emit()
     
     def playClicked(self):
@@ -162,14 +162,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def closeColorFilterWidget(self):
         self.colorFilterCheck.setChecked(False)
 
-    def showSensorsWidget(self,state):
-        if state == Qt.Checked:
-            self.sensorsWidget.show()           
-        else:
-            self.sensorsWidget.close() 
+    #def showSensorsWidget(self,state):
+    #    if state == Qt.Checked:
+    #        self.sensorsWidget.show()           
+    #    else:
+    #        self.sensorsWidget.close() 
 
-    def closeSensorsWidget(self):
-        self.sensorsCheck.setChecked(False)
+    #def closeSensorsWidget(self):
+    #    self.sensorsCheck.setChecked(False)
     
     def rotationChange(self,value):
         value=(1.0/(self.rotationDial.maximum()/2))*(value - (self.rotationDial.maximum()/2))

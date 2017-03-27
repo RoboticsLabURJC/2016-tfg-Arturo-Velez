@@ -203,84 +203,85 @@ class MyAlgorithm(threading.Thread):
 			print(refPt)
 			print(roixmin, roiymin, roixmax, roiymax)
 			
-			src = image.copy()
+			src_init = image.copy()
+			src = src_init[60:420, 0:640]
+			src = cv2.medianBlur(src, 3)
+			src_gray = cv2.cvtColor(src, cv2.COLOR_BGR2GRAY)
 			unpaired = 0
 				
-			if (opflow_first):
-				if (previous == None):
-					previous = src.copy()
-					opflow_first = 0
-					del src
-					return
+			p0 = cv2.goodFeaturesToTrack(src_gray, 100, 0.01, 10, None, None, 7)
+			index = 0
+			
+			for i in (p0):
+				if (i[0][0] < refPt[0][0]) or (i[0][0] > refPt[1][0]) or (i[0][1] < refPt[0][1]) or (i[0][1] > refPt[1][1]):
+					p0 = np.delete(p0, index, axis=0)
+					
+				else:
+					index = index + 1
 
-			lk_params = dict(winSize  = (31,31), maxLevel = 5, criteria = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 20, 0.03))
-			criteria = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 20, 0.03)
+			
+			while(True):
+				src2_init = self.camera.getImage()
+				src2 = src2_init[60:420, 0:640]
+				src2 = cv2.medianBlur(src2, 3)
+				src2_gray = cv2.cvtColor(src2, cv2.COLOR_BGR2GRAY)
 
-			img1 =cv2.cvtColor(previous, cv2.COLOR_BGR2GRAY)
-			#img1= cv2.blur(img1,(5,5))
-			img2 =cv2.cvtColor(src, cv2.COLOR_BGR2GRAY)
-			#img2= cv2.blur(img2,(5,5))
-			
-			
-			
-			p0 = cv2.goodFeaturesToTrack(img1, numpoints, .01, .01)
+				p1, st, err = cv2.calcOpticalFlowPyrLK(src_gray, src2_gray, p0, None,
+                                                   None, None,
+                                                   (30, 30), 2,
+                                                   (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0.03))
+
+				
+				if len(p1)<5:
+					print(len(p1))
+					refPt = []
+					cut = False
+					break
+					
+
+				good_p1 = p1[st==1]
+				maxAll = np.amax(good_p1, axis = 0)
+				minAll = np.amin(good_p1, axis = 0)
+				maxX = maxAll[0]#[0]
+				maxY = maxAll[1]#[1]
+				minX = minAll[0]#[0]
+				minY = minAll[1]#[1]
 			#Max and min point: 0 for x axis, 1 for y axis
 			
-			maxXpt, minXpt, xindexmin, xindexmax  = outPt(p0, 0)
-			maxYpt, minYpt, yindexmin, yindexmax = outPt(p0, 1)
-		
-			
-			
-			if (len(p0)>0):
-				#cv2.cornerSubPix(img1, p0, (15,15), (-1,-1), criteria)
-				p1, st, error = cv2.calcOpticalFlowPyrLK(img1, img2, p0, None, **lk_params)
-				 
-				roixmax, roixmin = resizeROI(p0,p1,xindexmax,xindexmin, 0)
-				roiymax, roiymin = resizeROI(p0,p1,yindexmax,yindexmin, 1)
-
-
-				for i in range(len(p1)):
-					if (st[i] == 0):
-						p = (int(p0[i][0][0]), int(p0[i][0][1]))
-						q = (int(p1[i][0][0]), int(p1[i][0][1]))
-						unpaired = unpaired + 1
-						cv2.circle(src, p, 5, (255,255,0), -1)
-						cv2.circle(src, q, 5, (0,255,255), -1)
-					
-					line_thickness = 1
-					line_color = (0, 0, 255)
-					
-					
-					p = (int(p0[i][0][0]), int(p0[i][0][1]))
-					q = (int(p1[i][0][0]), int(p1[i][0][1]))
-
-					if i == xindexmax or i == yindexmax or i == yindexmin or i == xindexmin:
-						cv2.circle(src, p, 5, (0,0,255), -1)
-						cv2.circle(src, q, 5, (255,255,255), -1)
-						cv2.line(src, p, q, line_color, line_thickness, 0)
-					else:	
-						cv2.circle(src, p, 5, (0,255,0), -1)
-						cv2.circle(src, q, 5, (255,0,0), -1)
-						cv2.line(src, p, q, line_color, line_thickness, 0)
+				for i,(f2,f1) in enumerate(zip(p1,p0)):
+					a, b = f2.ravel()
+					c, d = f1.ravel()
+					cv2.circle(src2, (a, b), 5, (0, 255, 0), -1)
+					cv2.circle(src2, (c, d), 5, (255, 0, 0), -1)
+					cv2.line(src2, (a, b), (c, d), (0,0,255), 2)
 						
-			cv2.rectangle(src, (roixmin,roiymin), (roixmax,roiymax), (0,255,0), thickness=2, lineType=8, shift=0)
+				cv2.rectangle(src2, (np.int0(minX), np.int0(minY)), (np.int0(maxX), np.int0(maxY)), (0,255,0), 2)
+				font = cv2.FONT_HERSHEY_SIMPLEX
+				cv2.putText(src2,str(len(p1)), (40,100),font,2,(255,255,255),2)
 			
-			previous = image.copy()
+				if src2 is not None:
+					self.camera.setColorImage(src2)
 
-			if smallROI(roixmax, roixmin, roiymax, roiymin): 
-					cut = False
-					print("pre")
-					print(refPt)
-					refPt = []					
-					setROI()
-					print("post")
-					print(refPt)
-			
-			del img1
-			del img2
-			
-			
-			return src
+				src_gray = np.copy(src2_gray)
+
+
+				p0 = cv2.goodFeaturesToTrack(src_gray, 100, 0.01, 10, None, None, 7)
+				index2 = 0
+				for p in (p0):
+					if (p[0][0] < (np.int0(minX) -2) or p[0][0] > (np.int0(maxX) +2)) or (p[0][1] < (np.int0(minY)-2) or p[0][1] > (np.int0(maxY)+2)):
+						p0 = np.delete(p0, index2, axis=0)
+					else:
+						index2 = index2 + 1
+
+				if len(p0)<10:
+					cv2.rectangle(src2, (np.int0(minX), np.int0(minY)), (np.copy(maxX), np.int0(maxY)), (0, 255, 0), 2)
+					p0 = cv2.goodFeaturesToTrack(src_gray, 100, 0.01, 10, None, None, 7)
+					index3 = 0
+					for g in (p0):
+						if ((g[0][0] < (minX - 20)) or (g[0][0] > (maxX + 20))) or ((g[0][1] < (minY - 20)) or (g[0][1] > (maxY + 20))):
+							p0 = np.delete(p0, index3, axis=0)
+						else:
+							index3 = index3 + 1
 			
 			
 
@@ -288,8 +289,8 @@ class MyAlgorithm(threading.Thread):
 		if input_image != None:
 	
 			res = flow(input_image)
-			font = cv2.FONT_HERSHEY_SIMPLEX
-			cv2.putText(res,str(unpaired), (40,100),font,2,(255,255,255),2)
+			
+			
 		
 		if res != None:
 			self.camera.setColorImage(res)
