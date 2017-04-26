@@ -59,34 +59,11 @@
           <pose>0 0 0.44 0 0 0</pose>
           <cast_shadows>true</cast_shadows>
           <geometry>
-            <box>
-                <size>0.4 0.2 0.2</size>
-           </box>
+	      
+          	<mesh>
+            	<uri>model://turtlebotJde2cam_test/meshes/untitled.dae</uri>
+         	</mesh>
          </geometry>
-          <material>
-            <diffuse>0 1 0 1</diffuse>
-         </material>
-       </visual>
-
-        <collision name="tag2_collision">
-          <pose>0.14 0 0.45 0 0 0</pose>
-          <geometry>
-            <box>
-                <size>0.12 0.2 0.01</size>
-           </box>
-         </geometry>
-       </collision>
-        <visual name="tag2_visual">
-          <pose>0.14 0 0.45 0 0 0</pose>
-          <cast_shadows>true</cast_shadows>
-          <geometry>
-            <box>
-                <size>0.12 0.2 0.01</size>
-           </box>
-         </geometry>
-          <material>
-            <diffuse>0 0 1 1</diffuse>
-         </material>
        </visual>
 
 
@@ -102,7 +79,7 @@
         <pose>-0.043340 0 0.084757 0 0 0</pose>
         <geometry>
           <mesh>
-            <uri>model://turtlebotJde2cam/meshes/plate_0_logo.dae</uri>
+            <uri>model://turtlebotJde2cam_test/meshes/plate_0_logo.dae</uri>
          </mesh>
        </geometry>
      </visual>
@@ -118,7 +95,7 @@
         <pose>-0.002660 0 0.141907 0 0 0</pose>
         <geometry>
           <mesh>
-            <uri>model://turtlebotJde2cam/meshes/plate_1_logo.dae</uri>
+            <uri>model://turtlebotJde2cam_test/meshes/plate_1_logo.dae</uri>
          </mesh>
        </geometry>
      </visual>
@@ -134,7 +111,7 @@
         <pose>-0.002660 0 0.199108 0 0 0</pose>
         <geometry>
           <mesh>
-            <uri>model://turtlebotJde2cam/meshes/plate_1_logo.dae</uri>
+            <uri>model://turtlebotJde2cam_test/meshes/plate_1_logo.dae</uri>
          </mesh>
        </geometry>
      </visual>
@@ -150,7 +127,7 @@
         <pose>-0.015820 0 0.405457 0 0 0</pose>
         <geometry>
           <mesh>
-            <uri>model://turtlebotJde2cam/meshes/plate_2_logo.dae</uri>
+            <uri>model://turtlebotJde2cam_test/meshes/plate_2_logo.dae</uri>
          </mesh>
        </geometry>
      </visual>
@@ -167,7 +144,7 @@
         <pose>-0.002540 0.111468 0.079992 0 0 0</pose>
         <geometry>
           <mesh>
-            <uri>model://turtlebotJde2cam/meshes/68-02403-125_Spacer.dae</uri>
+            <uri>model://turtlebotJde2cam_test/meshes/68-02403-125_Spacer.dae</uri>
          </mesh>
        </geometry>
      </visual>
@@ -184,7 +161,7 @@
         <pose>-0.002540 -0.111468 0.079992 0 0 0</pose>
         <geometry>
           <mesh>
-            <uri>model://turtlebotJde2cam/meshes/68-02403-125_Spacer.dae</uri>
+            <uri>model://turtlebotJde2cam_test/meshes/68-02403-125_Spacer.dae</uri>
          </mesh>
        </geometry>
      </visual>
@@ -201,7 +178,7 @@
         <pose>-0.072390 -0.111468 0.079992 0 0 0</pose>
         <geometry>
           <mesh>
-            <uri>model://turtlebotJde2cam/meshes/68-02403-125_Spacer.dae</uri>
+            <uri>model://turtlebotJde2cam_test/meshes/68-02403-125_Spacer.dae</uri>
          </mesh>
        </geometry>
      </visual>
@@ -218,7 +195,7 @@
         <pose>-0.072390 0.111468 0.079992 0 0 0</pose>
         <geometry>
           <mesh>
-            <uri>model://turtlebotJde2cam/meshes/68-02403-125_Spacer.dae</uri>
+            <uri>model://turtlebotJde2cam_test/meshes/68-02403-125_Spacer.dae</uri>
          </mesh>
        </geometry>
      </visual>
@@ -235,7 +212,7 @@
         <pose>0.067640 0.131420 0.087980 0 0 0</pose>
         <geometry>
           <mesh>
-            <uri>model://turtlebotJde2cam/meshes/68-04552-2000-RA_Turtlebot_M-F_Standoff.dae</uri>
+            <uri>model://turtlebotJde2cam_test/meshes/68-04552-2000-RA_Turtlebot_M-F_Standoff.dae</uri>
          </mesh>
        </geometry>
      </visual>
@@ -252,7 +229,7 @@
         <pose>0.067640 -0.131420 0.087980 0 0 0</pose>
         <geometry>
           <mesh>
-            <uri>model://turtlebotJde2cam/meshes/68-04552-2000-RA_Turtlebot_M-F_Standoff.dae</uri>
+            <uri>model://turtlebotJde2cam_test/meshes/68-04552-2000-RA_Turtlebot_M-F_Standoff.dae</uri>
          </mesh>
        </geometry>
      </visual>
@@ -269,7 +246,7 @@
         <pose>-0.052832 -0.131420 0.087980 0 0 0</pose>
         <geometry>
           <mesh>
-            <uri>model://turtlebotJde2cam/meshes/68-04552-2000-RA_Turtlebot_M-F_Standoff.dae</uri>
+            <uri>model://turtlebotJde2cam_test/meshes/68-04552-2000-RA_Turtlebot_M-F_Standoff.dae</uri>
          </mesh>
        </geometry>
      </visual>
@@ -286,7 +263,7 @@
         <pose>-0.052832 0.131420 0.087980 0 0 0</pose>
         <geometry>
           <mesh>
-            <uri>model://turtlebotJde2cam/meshes/68-04552-2000-RA_Turtlebot_M-F_Standoff.dae</uri>
+            <uri>model://turtlebotJde2cam_test/meshes/68-04552-2000-RA_Turtlebot_M-F_Standoff.dae</uri>
          </mesh>
        </geometry>
      </visual>
@@ -303,7 +280,7 @@
         <pose>0.067640 0.131420 0.145130 0 0 0</pose>
         <geometry>
           <mesh>
-            <uri>model://turtlebotJde2cam/meshes/68-04552-2000-RA_Turtlebot_M-F_Standoff.dae</uri>
+            <uri>model://turtlebotJde2cam_test/meshes/68-04552-2000-RA_Turtlebot_M-F_Standoff.dae</uri>
          </mesh>
        </geometry>
      </visual>
@@ -320,7 +297,7 @@
         <pose>0.067640 -0.131420 0.145130 0 0 0</pose>
         <geometry>
           <mesh>
-            <uri>model://turtlebotJde2cam/meshes/68-04552-2000-RA_Turtlebot_M-F_Standoff.dae</uri>
+            <uri>model://turtlebotJde2cam_test/meshes/68-04552-2000-RA_Turtlebot_M-F_Standoff.dae</uri>
          </mesh>
        </geometry>
      </visual>
@@ -337,7 +314,7 @@
         <pose>-0.052832 -0.131420 0.145130 0 0 0</pose>
         <geometry>
           <mesh>
-            <uri>model://turtlebotJde2cam/meshes/68-04552-2000-RA_Turtlebot_M-F_Standoff.dae</uri>
+            <uri>model://turtlebotJde2cam_test/meshes/68-04552-2000-RA_Turtlebot_M-F_Standoff.dae</uri>
          </mesh>
        </geometry>
      </visual>
@@ -354,7 +331,7 @@
         <pose>-0.052832 0.131420 0.145130 0 0 0</pose>
         <geometry>
           <mesh>
-            <uri>model://turtlebotJde2cam/meshes/68-04552-2000-RA_Turtlebot_M-F_Standoff.dae</uri>
+            <uri>model://turtlebotJde2cam_test/meshes/68-04552-2000-RA_Turtlebot_M-F_Standoff.dae</uri>
          </mesh>
        </geometry>
      </visual>
@@ -371,7 +348,7 @@
         <pose>0.067640 0.131420 0.202280 0 0 0</pose>
         <geometry>
           <mesh>
-            <uri>model://turtlebotJde2cam/meshes/68-02421-8000-RA_Turtlebot_F-F_Standoff.dae</uri>
+            <uri>model://turtlebotJde2cam_test/meshes/68-02421-8000-RA_Turtlebot_F-F_Standoff.dae</uri>
          </mesh>
        </geometry>
      </visual>
@@ -388,7 +365,7 @@
         <pose>0.067640 -0.131420 0.202280 0 0 0</pose>
         <geometry>
           <mesh>
-            <uri>model://turtlebotJde2cam/meshes/68-02421-8000-RA_Turtlebot_F-F_Standoff.dae</uri>
+            <uri>model://turtlebotJde2cam_test/meshes/68-02421-8000-RA_Turtlebot_F-F_Standoff.dae</uri>
          </mesh>
        </geometry>
      </visual>
@@ -405,7 +382,7 @@
         <pose>-0.052832 -0.131420 0.202280 0 0 0</pose>
         <geometry>
           <mesh>
-            <uri>model://turtlebotJde2cam/meshes/68-02421-8000-RA_Turtlebot_F-F_Standoff.dae</uri>
+            <uri>model://turtlebotJde2cam_test/meshes/68-02421-8000-RA_Turtlebot_F-F_Standoff.dae</uri>
          </mesh>
        </geometry>
      </visual>
@@ -422,7 +399,7 @@
         <pose>-0.052832 0.131420 0.202280 0 0 0</pose>
         <geometry>
           <mesh>
-            <uri>model://turtlebotJde2cam/meshes/68-02421-8000-RA_Turtlebot_F-F_Standoff.dae</uri>
+            <uri>model://turtlebotJde2cam_test/meshes/68-02421-8000-RA_Turtlebot_F-F_Standoff.dae</uri>
          </mesh>
        </geometry>
      </visual>
@@ -439,7 +416,7 @@
         <pose>-0.105098 0.098000 0.202308 0 0 0</pose>
         <geometry>
           <mesh>
-            <uri>model://turtlebotJde2cam/meshes/68-04556-RA_Kinect_Standoff_Assy.dae</uri>
+            <uri>model://turtlebotJde2cam_test/meshes/68-04556-RA_Kinect_Standoff_Assy.dae</uri>
          </mesh>
        </geometry>
      </visual>
@@ -456,7 +433,7 @@
         <pose>-0.105098 -0.098000 0.202308 0 0 0</pose>
         <geometry>
           <mesh>
-            <uri>model://turtlebotJde2cam/meshes/68-04556-RA_Kinect_Standoff_Assy.dae</uri>
+            <uri>model://turtlebotJde2cam_test/meshes/68-04556-RA_Kinect_Standoff_Assy.dae</uri>
          </mesh>
        </geometry>
      </visual>
@@ -562,7 +539,7 @@
         <visual name='visual'>
           <geometry>
             <mesh>
-              <uri>model://turtlebotJde2cam/meshes/sonyvid30/sonyvid30_bottom.dae</uri>
+              <uri>model://turtlebotJde2cam_test/meshes/sonyvid30/sonyvid30_bottom.dae</uri>
               <scale>4.000000 3.000000 3.000000</scale>
            </mesh>
          </geometry>
@@ -613,7 +590,7 @@
         <visual name='visual'>
           <geometry>
             <mesh>
-              <uri>model://turtlebotJde2cam/meshes/sonyvid30/sonyvid30_mid.dae</uri>
+              <uri>model://turtlebotJde2cam_test/meshes/sonyvid30/sonyvid30_mid.dae</uri>
               <scale>0.600000 1.000000 1.000000</scale>
            </mesh>
          </geometry>
@@ -680,7 +657,7 @@
         <visual name='visual'>
           <geometry>
             <mesh>
-              <uri>model://turtlebotJde2cam/meshes/sonyvid30/sonyvid30_top.dae</uri>
+              <uri>model://turtlebotJde2cam_test/meshes/sonyvid30/sonyvid30_top.dae</uri>
               <scale>2.000000 2.000000 1.300000</scale>
            </mesh>
          </geometry>
@@ -731,7 +708,7 @@
         <visual name='visual'>
           <geometry>
             <mesh>
-              <uri>model://turtlebotJde2cam/meshes/sonyvid30/sonyvid30_bottom.dae</uri>
+              <uri>model://turtlebotJde2cam_test/meshes/sonyvid30/sonyvid30_bottom.dae</uri>
               <scale>4.000000 3.000000 3.000000</scale>
            </mesh>
          </geometry>
@@ -782,7 +759,7 @@
         <visual name='visual'>
           <geometry>
             <mesh>
-              <uri>model://turtlebotJde2cam/meshes/sonyvid30/sonyvid30_mid.dae</uri>
+              <uri>model://turtlebotJde2cam_test/meshes/sonyvid30/sonyvid30_mid.dae</uri>
               <scale>0.600000 1.000000 1.000000</scale>
            </mesh>
          </geometry>
@@ -849,7 +826,7 @@
         <visual name='visual'>
           <geometry>
             <mesh>
-              <uri>model://turtlebotJde2cam/meshes/sonyvid30/sonyvid30_top.dae</uri>
+              <uri>model://turtlebotJde2cam_test/meshes/sonyvid30/sonyvid30_top.dae</uri>
               <scale>2.000000 2.000000 1.300000</scale>
            </mesh>
          </geometry>
