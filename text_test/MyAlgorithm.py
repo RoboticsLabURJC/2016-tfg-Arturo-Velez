@@ -18,7 +18,8 @@ refPt = []
 unpaired = 0
 numpoints = 90
 croppingExt = False
-lin = np.zeros((360,640), np.uint8)
+lin = np.zeros((240,320), np.uint8)
+center = [120, 160]
 
 cut = False
 
@@ -55,7 +56,7 @@ class MyAlgorithm(threading.Thread):
 
 			dt = finish_Time - start_time
 			ms = (dt.days * 24 * 60 * 60 + dt.seconds) * 1000 + dt.microseconds / 1000.0
-			#print (ms)
+
 			if (ms < time_cycle):
 				time.sleep((time_cycle - ms) / 1000.0)
 
@@ -86,61 +87,39 @@ class MyAlgorithm(threading.Thread):
 			refPt.append((x, y))
 			croppingExt = False
 			# Dentro de este elif dibujo un rectangulo alrededor de la region de interes
-			lin = np.zeros((360, 640), dtype=np.uint8)
+			lin = np.zeros((240, 320), dtype=np.uint8)
 			cv2.rectangle(lin, refPt[0], refPt[1], 255, 2)
-			print("En click")			
-			print(len(refPt))
+
 	
 		if (event == cv2.EVENT_MOUSEMOVE) and (croppingExt == True):
 			if len(refMov) == 1:
 				refMov.append((x, y))
-				lin = np.zeros((360, 640), dtype=np.uint8)
+				lin = np.zeros((240, 320), dtype=np.uint8)
 				cv2.rectangle(lin, refMov[0], refMov[1], 255, 2)
 
 			elif len(refMov) == 2:
 				refMov[1] = ((x, y))
-				lin = np.zeros((360, 640), dtype=np.uint8)
+				lin = np.zeros((240, 320), dtype=np.uint8)
 				cv2.rectangle(lin, refMov[0], refMov[1], 255, 2)
 
 	def execute(self):
 		input_image = self.camera.getImage()
 		
 
-		#Check if the point is inside a ROI	
-		def isValid(point, i):
-			return int(point[i][0][0]) >= roixmin and int(point[i][0][0]) <= roixmax and  int(point[i][0][1]) >= roiymin and int(point[i][0][1]) <= roiymax 
 			
 		#Check if the vector is longer than a threshold
 		def isVector(point0, point1, i):
 			return (math.sqrt(((point1[i][0][0]-point0[i][0][0])**2)+((point1[i][0][1]-point0[i][0][1])**2))) > 5 and (math.sqrt(((point1[i][0][0]-point0[i][0][0])**2)+((point1[i][0][1]-point0[i][0][1])**2))) < 30
 			
-		#Check the outer point
-		def outPt (points, c):
-			maxPt = points[0][0][c]
-			minPt = points[0][0][c]
-			minPtindex = 0
-			maxPtindex = 0
-			for i in range(len(points)):
-				if isValid(points, i):
-					if maxPt < points[i][0][c]:
-						maxPt = points[i][0][c]
-						maxPtindex = i
-					if minPt > points[i][0][c]:
-						minPt = points[i][0][c]
-						minPtindex = i
-			return maxPt, minPt, minPtindex, maxPtindex 
-			 	
-		#Check if the ROI is small than a size
-		def smallROI(xmax, xmin, ymax, ymin):
-
-			return ((xmax - xmin) < 20 or (ymax - ymin) < 20)  
+			 	 
 
 		def setROI():
-			global roixmin, roiymin, roixmax, roiymax, cut, refPt
+			global cut, refPt
 			
 			frame1 = self.camera.getImage()
 			gray_frame1 = cv2.cvtColor(frame1, cv2.COLOR_BGR2GRAY)
-			gray_frame1 = gray_frame1[60:420, 0:640]
+			#gray_frame1 = gray_frame1[0:420, 0:640]
+
 			img = cv2.add(gray_frame1, lin)
 			if not cut:			
 				cv2.imshow('ROI SELECTION', img)
@@ -150,7 +129,8 @@ class MyAlgorithm(threading.Thread):
 			while (not cut):
 				frame = self.camera.getImage()
 				gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-				gray_frame = gray_frame[60:420, 0:640]
+				#gray_frame = gray_frame[60:420, 0:640]
+				
 				img_tru = cv2.add(gray_frame, lin)
 				cv2.imshow('ROI SELECTION', img_tru)
 				key = cv2.waitKey(1) & 0xFF
@@ -161,50 +141,26 @@ class MyAlgorithm(threading.Thread):
 				else:
 					continue
 
-			
-			roixmin= refPt[0][0]
-			roiymin = refPt[0][1]
-			roixmax = refPt[1][0]
-			roiymax = refPt[1][1]
 
 
-		def resizeROI(pt0,pt1,imax,imin,c):
-			if c == 0:
-				roimin = roixmin
-				roimax = roixmax
-			elif c == 1:
-				roimin = roiymin
-				roimax = roiymax
-			
-			if pt1[imin][0][c] < roimin:
-				roimin = pt1[imin][0][c]
-			if pt1[imax][0][c] > roimax:
-				roimax = pt1[imax][0][c]
-			if pt1[imin][0][c] > roimin:
-				roimin = pt0[imin][0][c]
-			if pt1[imax][0][c] < roimax:
-				roimax = pt0[imax][0][c]
-				
-			return roimax, roimin
+		
+		def squareCenter(xmax, xmin, ymax, ymin):
+			global center
+			center[0] = ((xmax + xmin)/2)
+			center[1] = ((ymax + ymin)/2)
 
-		def lowPoints(xmax,xmin,ymax,ymin,points):
-			count = 0			
-			for i in range(len(points)):
-				if points[i][0][0] < xmin or points[i][0][0] > xmax or points[i][0][1] < ymin or points[i][0][1] > ymax:
-					count = count + 1
+		
 			
-			return count < 20
 
 		#Optical flow function
 		def flow(image):
-			global opflow_first, previous, roixmin, roiymin, roixmax, roiymax, unpaired,lin,  refMov, cut,refPt
+			global opflow_first, previous, unpaired,lin,  refMov, cut,refPt, center
 			setROI()
-			print("init")
-			print(refPt)
-			print(roixmin, roiymin, roixmax, roiymax)
 			
-			src_init = image.copy()
-			src = src_init[60:420, 0:640]
+			
+			
+			src = image.copy()
+			
 			src = cv2.medianBlur(src, 3)
 			src_gray = cv2.cvtColor(src, cv2.COLOR_BGR2GRAY)
 			unpaired = 0
@@ -221,8 +177,8 @@ class MyAlgorithm(threading.Thread):
 
 			
 			while(True):
-				src2_init = self.camera.getImage()
-				src2 = src2_init[60:420, 0:640]
+				src2 = self.camera.getImage()
+				
 				src2 = cv2.medianBlur(src2, 3)
 				src2_gray = cv2.cvtColor(src2, cv2.COLOR_BGR2GRAY)
 
@@ -233,7 +189,6 @@ class MyAlgorithm(threading.Thread):
 
 				
 				if len(p1)<5:
-					print(len(p1))
 					refPt = []
 					cut = False
 					break
@@ -246,6 +201,10 @@ class MyAlgorithm(threading.Thread):
 				maxY = maxAll[1]#[1]
 				minX = minAll[0]#[0]
 				minY = minAll[1]#[1]
+
+				squareCenter(maxX, minX, maxY, minY)
+				print(center)
+				
 			#Max and min point: 0 for x axis, 1 for y axis
 			
 				for i,(f2,f1) in enumerate(zip(p1,p0)):
@@ -253,6 +212,7 @@ class MyAlgorithm(threading.Thread):
 					c, d = f1.ravel()
 					cv2.circle(src2, (a, b), 5, (0, 255, 0), -1)
 					cv2.circle(src2, (c, d), 5, (255, 0, 0), -1)
+					cv2.circle(src2, (int(center[0]), int(center[1])), 10, (255, 255, 255), -1)
 					cv2.line(src2, (a, b), (c, d), (0,0,255), 2)
 						
 				cv2.rectangle(src2, (np.int0(minX), np.int0(minY)), (np.int0(maxX), np.int0(maxY)), (0,255,0), 2)
@@ -289,6 +249,7 @@ class MyAlgorithm(threading.Thread):
 		if input_image != None:
 	
 			res = flow(input_image)
+
 			
 			
 		
