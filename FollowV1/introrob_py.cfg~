@@ -1,0 +1,2 @@
+Introrob.Camera.Proxy  = Camera:default -h localhost -p 9999
+

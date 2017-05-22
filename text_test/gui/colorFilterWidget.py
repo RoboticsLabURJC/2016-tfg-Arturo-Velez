@@ -35,7 +35,7 @@ class ColorFilterWidget(QWidget):
         
     def initUI(self):
 
-        self.setWindowTitle("Color filter")
+        self.setWindowTitle("Motion")
 
         self.setMinimumSize(680,400)
         self.setMaximumSize(680,400)

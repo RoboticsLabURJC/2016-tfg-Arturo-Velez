@@ -26,7 +26,7 @@ class Sensor:
     ARDRONE1=0
     ARDRONE2=1
     ARDRONE_SIMULATED=10
-    MAX_LINX  = 0.1
+    MAX_LINX  = 0.3
     MAX_LINY  = 0.3
     MAX_LINZ  = 0.3
     MAX_ANGZ  = 0.4
