@@ -131,8 +131,8 @@ class MyAlgorithm(threading.Thread):
 			
 			refImg = self.camera.getImage()
 			size = refImg.shape
-			schSize = ((size[0]-50),(size[1]-50))
-			refPt = [(50, 50), schSize]
+			schSize = ((size[1]-10),(size[0]-10))
+			refPt = [(10, 10), schSize]
 
 
 		
@@ -159,17 +159,19 @@ class MyAlgorithm(threading.Thread):
 			unpaired = 0
 				
 			p0 = cv2.goodFeaturesToTrack(src_gray, 100, 0.01, 10, None, None, 7)
-			print(len(p0))
+			print("----p0----")			
+			print(p0)
 			
 			index = 0
-		
-			for i in (p0):
-				if (i[0][0] < refPt[0][0]) or (i[0][0] > refPt[1][0]) or (i[0][1] < refPt[0][1]) or (i[0][1] > refPt[1][1]):
-					p0 = np.delete(p0, index, axis=0)
-				
-				else:
-					index = index + 1
 			if p0 != None:
+		
+				for i in (p0):
+					if (i[0][0] < refPt[0][0]) or (i[0][0] > refPt[1][0]) or (i[0][1] < refPt[0][1]) or (i[0][1] > refPt[1][1]):
+						p0 = np.delete(p0, index, axis=0)
+				
+					else:
+						index = index + 1
+			
 			
 				while(True):
 					src2 = self.camera.getImage()
@@ -182,17 +184,35 @@ class MyAlgorithm(threading.Thread):
 		                                           (30, 30), 2,
 		                                           (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0.03))
 	
+					print("----p1----")						
 					print(p1)					
 					if p1 != None:
 
-				
-						if len(p1)<5:
-							refPt = []
-							cut = False
-							break
+										
+						#if len(p1)<5:
+						#	refPt = []
+						#	cut = False
+						#	break
 					
 
 						good_p1 = p1[st==1]
+						print("----Good p1----")						
+						print(len(good_p1))
+						if len(good_p1) == 0:
+							maxX = refPt[1][0]
+							maxY = refPt[1][1]
+							minX = refPt[0][0]
+							minY = refPt[0][1]
+							cv2.rectangle(src2, (np.int0(minX), np.int0(minY)), (np.int0(maxX), np.int0(maxY)), (255,0,0), 2)
+							font = cv2.FONT_HERSHEY_SIMPLEX
+							cv2.putText(src2,"All 0", (40,100),font,2,(255,255,255),2)
+			
+							if src2 is not None:
+								print("SHOWIIING WHEN NO GOOD")
+								self.camera.setColorImage(src2)	
+							break					
+
+						print("NOT BREAK")
 						maxAll = np.amax(good_p1, axis = 0)
 						minAll = np.amin(good_p1, axis = 0)
 						maxX = maxAll[0]#[0]
@@ -205,7 +225,7 @@ class MyAlgorithm(threading.Thread):
 						velX = ((refCenter[0] - center[0])/refCenter[0])
 						velY = ((refCenter[1] - center[1])/refCenter[1])
 						print(velX, velY)
-						#self.cmdvel.sendCMDVel(velY, velX, 0,0,0,0)					
+						self.cmdvel.sendCMDVel(velY, velX, 0,0,0,0)					
 						
 				
 				
@@ -256,11 +276,12 @@ class MyAlgorithm(threading.Thread):
 						maxY = refPt[1][1]
 						minX = refPt[0][0]
 						minY = refPt[0][1]
-						cv2.rectangle(src2, (np.int0(minX), np.int0(minY)), (np.int0(maxX), np.int0(maxY)), (0,255,0), 2)
+						cv2.rectangle(src2, (np.int0(minX), np.int0(minY)), (np.int0(maxX), np.int0(maxY)), (255,0,0), 2)
 						font = cv2.FONT_HERSHEY_SIMPLEX
 						cv2.putText(src2,"All 0", (40,100),font,2,(255,255,255),2)
 			
 						if src2 is not None:
+							print("SHOWIIING")
 							self.camera.setColorImage(src2)	
 						break						
 						
