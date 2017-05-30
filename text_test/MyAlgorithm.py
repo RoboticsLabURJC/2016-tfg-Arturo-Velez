@@ -21,15 +21,13 @@ croppingExt = False
 lin = np.zeros((240,320), np.uint8)
 center = [120, 160]
 refCenter = [160, 120]
-HUDhor0 = [0, 120]
-HUDhor1 = [320, 120]
-HUDver0 = [160, 0]
-HUDver1 = [160,240]
-HUD = [HUDhor0, HUDhor1, HUDver0, HUDver1]
+
 href = 0
-velX = 0.0
+velX = 1.0
 velY = 0.0
 velZ = 0.0
+sec= 1
+secless=0
 init = False
 size = (0,0)
 
@@ -140,12 +138,42 @@ class MyAlgorithm(threading.Thread):
 			global center
 			center[0] = ((xmax + xmin)/2)
 			center[1] = ((ymax + ymin)/2)
-
+		
+		def changeTime():
+			global sec, secless
+			if sec > secless and sec <20:
+				secless = sec
+				sec = sec + 1
+			elif sec < secless + 2 and sec > 2:
+				secless = sec
+				sec = sec 
+			else:
+				sec = 1
+				secless = 0
+		
+		def changeDirection():
+			global velX, velY
+			
+			if velX != 0.0 and velY == 0.0:
+				velY = -velX
+				velX = 0.0
+			elif velX == 0.0 and velY != 0.0:
+				velX = velY
+				velY = 0.0 
+		
+		def seek():
+			global velX, velY, sec, secless
+			self.cmdvel.sendCMDVel(velY, velX, 0,0,0,0)
+			print ("SLEEPING: " + str(sec) + " SECONDS")
+			time.sleep(sec)
+			changeTime()
+			changeDirection()
+				
 		
 
 		#Optical flow function
 		def flow(image):
-			global opflow_first, previous, unpaired,lin,  refMov, cut,refPt, center, refCenter, HUD, init
+			global opflow_first, previous, unpaired,lin,  refMov, cut,refPt, center, refCenter, init
 
 			
 			setROI()
@@ -159,8 +187,6 @@ class MyAlgorithm(threading.Thread):
 			unpaired = 0
 				
 			p0 = cv2.goodFeaturesToTrack(src_gray, 100, 0.01, 10, None, None, 7)
-			print("----p0----")			
-			print(p0)
 			
 			index = 0
 			if p0 != None:
@@ -184,20 +210,13 @@ class MyAlgorithm(threading.Thread):
 		                                           (30, 30), 2,
 		                                           (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0.03))
 	
-					print("----p1----")						
-					print(p1)					
+										
 					if p1 != None:
 
 										
-						#if len(p1)<5:
-						#	refPt = []
-						#	cut = False
-						#	break
-					
-
 						good_p1 = p1[st==1]
-						print("----Good p1----")						
-						print(len(good_p1))
+						print("LENGHT GOOD_P1: " + str(len(good_p1)))
+						
 						if len(good_p1) == 0:
 							maxX = refPt[1][0]
 							maxY = refPt[1][1]
@@ -206,6 +225,7 @@ class MyAlgorithm(threading.Thread):
 							cv2.rectangle(src2, (np.int0(minX), np.int0(minY)), (np.int0(maxX), np.int0(maxY)), (255,0,0), 2)
 							font = cv2.FONT_HERSHEY_SIMPLEX
 							cv2.putText(src2,"All 0", (40,100),font,2,(255,255,255),2)
+							seek()
 			
 							if src2 is not None:
 								print("SHOWIIING WHEN NO GOOD")
@@ -240,8 +260,7 @@ class MyAlgorithm(threading.Thread):
 							cv2.circle(src2, (c, d), 5, (255, 0, 0), -1)
 							cv2.circle(src2, (int(center[0]), int(center[1])), 10, (255, 255, 255), -1)
 							cv2.line(src2, (a, b), (c, d), (0,0,255), 2)
-							cv2.line(src2, (HUD[0][0],HUD[0][1]), (HUD[1][0],HUD[1][1]), (255,255,0), 2)
-							cv2.line(src2, (HUD[2][0],HUD[2][1]), (HUD[3][0],HUD[3][1]), (255,255,0), 2)
+							
 					
 						
 						cv2.rectangle(src2, (np.int0(minX), np.int0(minY)), (np.int0(maxX), np.int0(maxY)), (0,255,0), 2)
@@ -279,6 +298,7 @@ class MyAlgorithm(threading.Thread):
 						cv2.rectangle(src2, (np.int0(minX), np.int0(minY)), (np.int0(maxX), np.int0(maxY)), (255,0,0), 2)
 						font = cv2.FONT_HERSHEY_SIMPLEX
 						cv2.putText(src2,"All 0", (40,100),font,2,(255,255,255),2)
+						seek()
 			
 						if src2 is not None:
 							print("SHOWIIING")
