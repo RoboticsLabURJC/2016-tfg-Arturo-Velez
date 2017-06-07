@@ -192,7 +192,7 @@ Todo ello gobernado por la función que gestiona el paso del tiempo y lanza la or
 \begin{python}[
     basicstyle=\scriptsize, %or \small or \footnotesize etc.
 ]
-def seek():
+def seek(
 	global velX, velY, sec, secless
 	self.cmdvel.sendCMDVel(velY, velX, 0,0,0,0)
 	time.sleep(sec)
@@ -200,13 +200,14 @@ def seek():
 	changeDirection()
 \end{python}
 
-%
-%El segundo modo es con la selección automática del objeto. Aquí el drone ejecuta un algoritmo de búsqueda que consiste en movimientos en espiral por el escenario de manera creciente y decreciente. El tamaño de esta espiral es en función del tiempo hasta un número de segundos definido experimentalmente dependiendo del tamaño del escenario en cuestión. Cuando el tiempo llega al máximo definido, el drone empieza a hacer la espiral de nuevo más pequeña hasta acabar en la posición inicial de la que había partido. Este algoritmo de búsqueda se interrumpe en el momento que el drone encuentra el objeto como se ha explicado en la sección anterior.\\
-%
-%Una vez que el objeto esta localizado, tanto por el primer método como por el segundo, el cálculo del punto central de la región de interés se calcula con una ecuación de cálculo de punto medio $C = (V_1 + V_2)/2$ donde $C$ es el punto central de la región de interés y $V_1$ y $V_2$ los vértices de la misma.\\
-%
-%Con ese punto central se aplica la formula, igual que en la versión de imágenes básicas, $V= (R_c - C)/R_c$, donde $V$ es la velocidad, $R_c$ es el punto de referencia de la imagen y $C$ es el punto central de la región de interés. Aquí la diferencia con la versión de imágenes básicas es que el drone no se eleva para buscar el objeto, salvo que el usuario se lo haya ordenado y será su responsabilidad establecerle una altura a la cual el objeto se pueda seleccionar bien. Por lo tanto, una vez seleccionado bien el objeto, se envía la velocidad calculada a la función que se encarga del control del drone y este le persigue.\\
-%
-%Aquí la capacidad de cómputo adquiere importancia, debido a que el procesamiento de una imagen con textura requiere de más capacidad, por lo que la velocidad a la cual es capaz de encontrar y perseguir el drone al objeto va a venir limitada por la capacidad de procesamiento que tenga la máquina que ejecute el algoritmo.\\ 
-%
-%Del mismo modo que en las imágenes básicas, si el drone pierde el objeto, ejecuta de nuevo los algoritmos de búsqueda, automática en caso de que se este ejecutando la versión completamente autónoma del drone, o bien abrirá de nuevo la ventana de selección de objeto. La diferencia respecto a si un objeto está perdido o no en esta versión, es que el objeto no se da por perdido solo cuando sale de la imagen, si no cuando el número de puntos soporte cae por debajo de un umbral, que puede ser bien porque el objeto sale de la imagen y por lo tanto el número de puntos soporte cae como es obvio por debajo del umbral, bien porque el drone se encuentra a una altura por algún motivo en la que no calcula bien los puntos de soporte o bien porque el objeto se mueve muy rápido y la capacidad de cómputo no es suficiente para calcular correctamente los puntos.\\
+Una vez que el objeto esta localizado, se inician los algoritmos de seguimiento. Se obtiene el punto central del objeto desde la parte perceptiva  y se aplica la formula, para calcular la velocidad, $V= (R_c - C)/R_c$, donde $V$ es la velocidad, $R_c$ es el punto de referencia al cual $C$, que es el punto central del objeto, debe dirigirse.\\
+\begin{python}[
+    basicstyle=\scriptsize, %or \small or \footnotesize etc.
+]
+velX = ((refCenter[0] - center[0])/refCenter[0])
+velY = ((refCenter[1] - center[1])/refCenter[1])
+
+self.cmdvel.sendCMDVel(velY, velX, 0,0,0,0)
+\end{python}
+
+Este método pretende siempre tener el objeto en el punto de referencia, es decir, si el objeto se esta desplazando, el algoritmo va a tratar volverlo a poner en el centro, para así tratar de hacer coincidir el centro del objeto con el punto de referencia. Si el drone pierde el objeto, ejecuta de nuevo los algoritmos de búsqueda automática por espiral.\\

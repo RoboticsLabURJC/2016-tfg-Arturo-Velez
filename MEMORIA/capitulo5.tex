@@ -1,1 +1,105 @@
-\hspace{1 cm} TBW
+\hspace{1 cm} Se han hecho diferentes experimentos con el componente para certificar su correcto funcionamiento, el cual cumple con los objetivos marcados de hacer el seguimiento de un objeto con textura.\\
+
+Así pues, en la versión final del componente el comportamiento habitual consiste en tras ejecutar el mundo simulado de pruebas y el componente, se le ordena al drone despegar a través del interfaz diseñado por JdeRobot para el manejo de los componentes.\\
+
+\begin{figure} [H]
+  \begin{center}
+    \includegraphics[width=0.5\textwidth]{figuras/teleop.jpg}
+  \end{center}
+  \caption{Interfaz de teleoperador}
+  \label{fig:teleop}
+\end{figure}
+
+Con el drone en el aire, el método de ordenarle al mismo que empiece la busqueda y seguimiento es a traves del botón play del teleoperador. En este momento el drone empieza a ejecutar simultaneamente la percepción visual y los algoritmos de control, inicialmente la busqueda del objeto.\\
+
+\begin{figure} [H]
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{figuras/insearch.jpg}
+  \end{center}
+  \caption{Drone buscando objeto}
+  \label{fig:insearch}
+\end{figure}
+
+Una vez que el objeto aparece en la imagen y el componente lo detecta, comienzan los mecanismo de seguimiento, tanto visual como persecución. En la parte visual se obtienen los puntos soporte, la región de interes y el centro de la misma  para mostrarlos en la interfaz. A su vez el dato del centro del objeto se manda al algoritmo de seguimiento para que este realice su función de persecución.\\
+
+\begin{figure} [H]
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{figuras/visualspot.jpg}
+  \end{center}
+  \caption{Objeto localizado y drone persiguiendo}
+  \label{fig:visualspot}
+\end{figure}
+
+Como se ha explicado anteriormente, en caso de perdida del objeto, el drone volverá al estado de búsqueda.\\
+
+Se realizaron experimentos con diferentes objetos. Debido a la diferencia entre que un objeto tiene más textura que el otro, se puede observar como los puntos soporte obtenidos en el que tiene más textura es mayor que en el otro. El número mostrado es el número de puntos soporte instantáneo.\\
+
+\begin{figure} [H]
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{figuras/hat.jpg}
+  \end{center}
+  \caption{Objeto de prueba: sombrero}
+  \label{fig:hat}
+\end{figure}
+
+\begin{figure} [H]
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{figuras/person.jpg}
+  \end{center}
+  \caption{Objeto de prueba: persona}
+  \label{fig:person}
+\end{figure}
+
+Se estuvieron realizando experimentos con una cámara real para desarrollar y comprobar el funcionamiento del algoritmo. El principal uso que se le dio al uso de la cámara real fue para probar que la función Good Features to Track obtenía los puntos correctamente. Gracias a este objeto de prueba se puede comprobar como la función obtiene los puntos principalmente en las esquinas.\\
+
+\begin{figure} [H]
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{figuras/goodfeat.jpg}
+  \end{center}
+  \caption{Objeto de prueba: cuadricula para Good Features to Track}
+  \label{fig:goodfeat}
+\end{figure}
+
+Comprobado que Good Features to Track funcionaba correctamente, algo que es indispensable para poder calcular el flujo óptico, se paso a experimentar con ese la función encargada de calcular el movimiento de los puntos de la imagen. \\
+
+\begin{figure} [H]
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{figuras/opticalflow1.jpg}
+  \end{center}
+  \caption{Objeto de prueba: copo de nieve con flujo óptico}
+  \label{fig:opticalflow1}
+\end{figure}
+
+Debido a que esta función calculaba bien el movimiento de los puntos por la imagen, se probo que también se calculara correctamente la región de interés dentro de la cual estaría el objeto. Como se ha explicado, la región la define los puntos más extremos del objeto.\\
+
+\begin{figure} [H]
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{figuras/oproireal.jpg}
+  \end{center}
+  \caption{Objeto de prueba: copo de nieve con región de interés}
+  \label{fig:oproireal}
+\end{figure}
+
+Pese a todo el cálculo de la región de interés no es del todo perfecto, es decir, no toma el valor del punto real más extremo para su definición, pero la aproximación es muy buena con un error muy pequeño.\\
+
+Se han hecho pruebas seleccionando la región de interés manualmente. Esto consistía en abrir una ventana con la imagen donde el usuario manualmente tenía que trazar un rectángulo sobre el objeto de interés para poder hacer el seguimiento visual.\\
+
+\begin{figure} [H]
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{figuras/setroi.jpg}
+  \end{center}
+  \caption{Objeto de prueba: copo de nieve seleccionando región de interés}
+  \label{fig:setroi}
+\end{figure}
+
+Además de estas pruebas con cámara real, se hicieron otras pruebas en el simulador Gazebo, realizando el seguimiento de un objeto con colores, que como se ha explicado antes basaba su busqueda en si el objeto tenía el color o no. Los valores del color se obtenían de forma experimental y se ajustaba el componente con estos valores para que, a continuacion, la parte perceptiva detectase el objeto y pudiera darle la información necesaria a los algoritmos de control.\\
+
+\begin{figure} [H]
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{figuras/filtergazebo.jpg}
+  \end{center}
+  \caption{Objeto de prueba: robot terrestre con colores}
+  \label{fig:filtergazebo}
+\end{figure}
+
+Estos experimentos con las diferentes características de las que se compone la versión final, son la prueba de que el desarrollo es válido y que individualmente cada una de sus características funcionan tal y como se espera, es decir, el componente tiene esa información de entrada y se le aplican los métodos necesarios para que a la salida se tenga el resultado esperado.
