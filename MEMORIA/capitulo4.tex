@@ -20,7 +20,7 @@ El desarrollo ha consistido en 3 partes marcadas:
   \label{fig:esquebb}
 \end{figure}
 
-Por lo tanto basándonos en este esquema el drone va a tener que ser capaz de tomar imagenes, tratarlas aplicando ciertos algoritmos y con esa información utilizar algoritmos y funciones para poder tener la respuesta apropiada. Aquí es donde se subdivide el problema en dos, parte perceptiva y parte de control:\\
+Por lo tanto basándonos en este esquema, el drone va a tener que ser capaz de tomar imagenes, tratarlas aplicando ciertos algoritmos y con esa información utilizar algoritmos y funciones para poder tener la respuesta apropiada. Aquí es donde se subdivide el problema en dos, parte perceptiva y parte de control:\\
 
 \begin{figure} [H]
   \begin{center}
@@ -31,7 +31,7 @@ Por lo tanto basándonos en este esquema el drone va a tener que ser capaz de tom
 \end{figure}
 
 \section{Percepción visual}
-\hspace{1 cm} Esta parte es la primera con la que se encuentra el componente. Para obtener la entrada, el componente se conecta al interfaz de comunicaciones ICE mediante la función \textbf{self.camera.getImage()}, esta función se encarga de obtener las imágenes que el interfaz ofrece y este a su vez las puede obtener de diferentes fuentes, en este caso, la obtiene de la cámara del drone simulado de Gazebo.\\
+\hspace{1 cm} Esta parte es la parte principal con la que tiene que lidiar el componente. Para obtener la entrada, el componente se conecta al interfaz de comunicaciones ICE mediante la función \textbf{self.camera.getImage()}, esta función se encarga de obtener las imágenes que el interfaz ofrece y este a su vez las puede obtener de diferentes fuentes, en este caso, la obtiene de la cámara del drone simulado de Gazebo.\\
 
 Una vez se obtiene la imagen correctamente el componente busca en la imagen el objeto de interés. Para ello tiene un area de búsqueda en la misma y se mantiene en ese estado hasta que el objeto aparece en la imagen.
 
@@ -72,7 +72,7 @@ if p0 != None:
 
 Entonces, una vez calculados los puntos en el fotograma N, pasa a calcular la posición de los mismos en el fotograma N+1. Partiendo de la suposición de que todos los píxeles vecinos tendrán movimiento similar, se utiliza el metodo de Lucas-Kanade que toma un parche 3x3 alrededor del punto, así que todos los 9 puntos tienen el mismo movimiento. Podemos encontrar $(f_x , f_y , f_t)$ para estos 9 puntos. Así que ahora nuestro problema se convierte en la solución de 9 ecuaciones.\\ 
 
-OpenCV proporciona todo esto en una sola función, \textbf{cv2.calcOpticalFlowPyrLK()} que realiza el seguimiento de algunos puntos en un vídeo. La función recibe el fotograma anterior, los puntos anteriores y el fotograma siguiente. Devuelve los puntos siguientes junto con algunos valores de estado que tiene un valor de 1 si se encuentra el siguiente punto, de lo contrario cero. Del mismo modo, la imagen tiene que ser en escala de grises.
+OpenCV soluciona todo esto en una sola función, \textbf{cv2.calcOpticalFlowPyrLK()} que realiza el seguimiento de algunos puntos en un vídeo. La función recibe el fotograma anterior, los puntos anteriores y el fotograma siguiente. Devuelve los puntos siguientes junto con algunos valores de estado que tiene un valor de 1 si se encuentra el siguiente punto, de lo contrario cero. Del mismo modo, la imagen tiene que ser en escala de grises.
 
 \begin{python}[
     basicstyle=\scriptsize, %or \small or \footnotesize etc.
@@ -115,7 +115,7 @@ def squareCenter(xmax, xmin, ymax, ymin):
 
 Con todo esto el componente es capaz de obtener la posición del objeto dentro del plano de la imagen y poder hacer un seguimiento del mismo durante todo el flujo de fotogramas de manera iterativa.\\
 
-En ocasiones el objeto desaparecerá de la imagen, bien porque sale del plano o bien porque se hace más pequeño. En tal caso, los puntos soporte no podrán ser calculados y por tanto no habrá puntos buenos  para poder realizar el seguimiento dentro de la imagen, por lo que la percepción del componente se reiniciará al modo de búsqueda hasta que el objeto vuelva a aparecer en la imagen.\\
+En ocasiones el objeto desaparecerá de la imagen, bien porque sale del plano o bien porque se hace más pequeño. En tal caso, los puntos soporte no podrán ser calculados y por tanto no habrá puntos ``buenos''  para poder realizar el seguimiento dentro de la imagen, por lo que la percepción del componente se reiniciará al modo de búsqueda hasta que el objeto vuelva a aparecer en la imagen o sea posible calcular los puntos.\\
 
 En las versiones iniciales del trabajo de fin de grado se realizaron utilizando imágenes con unas características muy marcadas, como por ejemplo colores fuertes para poder emplear filtros de color. Aqui la percepción tiene unas ligeras modificaciones.\\
 
@@ -188,7 +188,7 @@ def changeDirection():
 		velY = 0.0 
 \end{python}
 
-Todo ello gobernado por la función que gestiona el paso del tiempo y lanza la orden de cambio de dirección y aumenta el tiempo:
+Todo ello gobernado por la función que gestiona el paso del tiempo y lanza la orden de cambio de dirección y aumento del tiempo:
 \begin{python}[
     basicstyle=\scriptsize, %or \small or \footnotesize etc.
 ]

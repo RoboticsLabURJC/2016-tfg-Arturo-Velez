@@ -1,7 +1,7 @@
 \hspace{1 cm}Para el desarrollo de este trabajo de fin de grado se ha empleado la plataforma del proyecto JdeRobot de software libre y software de terceros para de este modo poder adaptar la infraestructura disponible a las condiciones ideales y creación de contenido para la correcta ejecución de los algoritmos creados.
 
 \section{Sistema operativo virtualizado}
-\hspace{1 cm} Con la mejora de las redes actuales, y la velocidad que estas ofrecen cada vez más se están utilizando las tecnologías conocidas como "cloud" o "en la nube". Este tipo de tecnologías consisten en una virtualización de las máquinas en centros de datos con servidores muy potentes y con múltiples replicaciones de las mismas para mayor seguridad de los datos en caso de catástrofe. Entre las empresas que ofrecen este servicio podemos encontrar Microsoft o Amazon, las cuales te permiten crear desde máquinas muy simples a maquinas tremendamente potentes capaces de procesar grandes cantidades de información.\\
+\hspace{1 cm} Con la mejora de las redes actuales, y la velocidad que estas ofrecen cada vez más se están utilizando las tecnologías conocidas como ``cloud'' o ``en la nube''. Este tipo de tecnologías consisten en una virtualización de las máquinas en centros de datos con servidores muy potentes y con múltiples replicaciones de las mismas para mayor seguridad de los datos en caso de catástrofe. Entre las empresas que ofrecen este servicio podemos encontrar Microsoft o Amazon, las cuales te permiten crear desde máquinas muy simples a maquinas tremendamente potentes capaces de procesar grandes cantidades de información.\\
 
 En el caso de este proyecto, la virtualización se ha hecho localmente, en un disco duro externo y una copia de seguridad en un disco duro exactamente igual, con el objetivo de, en caso de destrucción parcial o total de la unidad, que haya una copia exacta en otro lugar para salvar la perdida de información. Además, se ha diseñado la infraestructura de manera que cualquiera de las replicas de la maquina virtual, pueda ser arrancada en cualquier máquina física, con el único requisito de que esta tenga instalado el programa apropiado para poder arrancar la maquina virtual.\\
 
@@ -31,7 +31,7 @@ Durante la realización del proyecto hubo una descontinuación del soporte de Para
 
 	Gracias a que hay una cantidad importante de robots y objetos diseñados, se puede realizar todo tipo de pruebas de algoritmos de una manera muy próxima a la realidad pero sin la complejidad de necesitar un hardware para realizar las pruebas.\\
 	
-	La última versión en la que se ha trabajado en la realización del trabajo en la 7.4, y en esta versión es donde se ha realizado la experimentación para validar así los algoritmos desarrollados.\\
+	La última versión en la que se ha trabajado en la realización del trabajo es la 7.4, y en esta versión es donde se ha realizado la experimentación para validar así los algoritmos desarrollados.\\
 		
 \subsection{ARDrone}
 \hspace{1 cm}El modelo empleado para el desarrollo del proyecto ha sido el AR.Drone de la marca Parrot, o más bien su modelo en el entorno de simulación Gazebo.\\
@@ -105,7 +105,7 @@ Durante la realización del proyecto hubo una descontinuación del soporte de Para
 	Durante el desarrollo del trabajo de fin de grado se han llevado a cabo diferentes actualizaciones de la infraestructura de JdeRobot. La última versión empleada ha sido la 5.5.\\
 	
 \section{Bibliotecas}
-\hspace{1 cm}El lenguaje empleado en este trabajo de fin de grado es Python. Para el desarrollo de los algoritmos se han empleado fundamentalmente dos blibliotecas o paquetes que permiten a este lenguaje que realice las operaciones necesarias para el correcto funcionamiento del proyecto. Estas son OpenCV y Numpy.
+\hspace{1 cm}El lenguaje empleado en este trabajo de fin de grado es Python. Para el desarrollo de los algoritmos se han empleado fundamentalmente dos blibliotecas o paquetes que permiten a este lenguaje que realice las operaciones necesarias para el correcto funcionamiento del proyecto, además de emplear una biblioteca de comunicaciones para conectar los componentes. Estas son OpenCV, Numpy y ICE. 
 
 \subsection{Biblioteca de comunicaciones: ICE}
 \hspace{1 cm}ICE o Internet Communication Engine es un middleware orientado a objetos con soporte para diversos lenguajes de programación: C++, .NET, Java, Python, ObjetiveC, Ruby y PHP. ICE provee de objetos orientados a RPC, computación distribuida y servicios de publicación/suscripción. Es desarrollado por Zeroc y tiene una licencia dual: bajo una licencia privativa y bajo GNU GPL. Se encuentra disponible en la mayoría de los sistemas operativos actuales y tiene también una versión reducida para entornos móviles.\\
@@ -133,7 +133,7 @@ Durante la realización del proyecto hubo una descontinuación del soporte de Para
 
 	Open CV es multiplataforma, existiendo versiones para GNU/Linux, Mac OS X y Windows. Contiene más de 500 funciones que abarcan una gran gama de áreas en el proceso de visión.\\
 	
-	Esta escrito en C/C ++, la biblioteca puede aprovechar el procesamiento multi-core. Habilitando OpenCL, puede aprovechar la aceleración de hardware de la plataforma empleada. OpenCV tiene más de 47 mil personas de la comunidad de usuarios y el número estimado de descargas más de 9 millones. Los usos van desde el arte interactivo hasta la inspección de minas, mapas en la web o la robótica avanzada.\\
+	Esta escrito en C/C ++, la biblioteca puede aprovechar el procesamiento multi-core. Habilitando OpenCL, puede aprovechar la aceleración de hardware de la plataforma empleada. OpenCV tiene más de 47 mil personas en la comunidad de usuarios y el número estimado de descargas más de 9 millones. Los usos van desde el arte interactivo hasta la inspección de minas, mapas en la web o la robótica avanzada.\\
 	
 	Gracias ha esta biblioteca se han podido conseguir los objetivos de percepción visual, ya que las funciones de las cuales dispone esta biblioteca permiten hacer operaciones sobre las imágenes obtenidas por nuestro drone y obtener así una serie de datos muy útiles para el desarrollo de los mecanismos de control. La versión utilizada para el desarrollo del trabajo de fin de grado es la 3.2.0.
 	

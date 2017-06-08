@@ -1,11 +1,11 @@
 \hspace{1 cm} Una vez expuesto el contexto en el que se realiza este trabajo fin de grado, en el presente capítulo se detallan los objetivos concretos y requisitos de la aplicación, así como la metodología y el plan de trabajo realizados. 
 \section{Descripción del problema}
-\hspace{1 cm}El objetivo global de este trabajo de fin de grado es diseñar y programar una aplicación para que un drone realizar un seguimiento de objetos con textura que se mueve por una superficie. Este seguirá un objeto marcado inicialmente acorde a lo programado. El algoritmo será capaz de manejar un robot cudricóptero desarrollado en un entorno simulado en 3D.\\
+\hspace{1 cm}El objetivo global de este trabajo de fin de grado es diseñar y programar una aplicación para que un drone pueda realizar un seguimiento de objetos con textura que se mueven por una superficie. Este seguirá un objeto detectado inicialmente acorde a lo programado. El algoritmo será capaz de manejar un robot cudricóptero desarrollado en un entorno simulado en 3D.\\
 	
 Este objetivo general se ha articulado en tres subobjetivos:
 	\begin{enumerate}
     		\item{Percepción visual: el algoritmo será capaz de detectar objetos de interés captados mediante una cámara y aplicando las diferentes técnicas de detección y emparejamiento de puntos para conseguir un mecanismo de control correcto.}
-   		 \item{Control del drone: se seleccionará un objeto y el drone será capaz de seguir dicho objeto de interés durante toda la prueba. Así mismo, deberá localizar el objeto de interés en caso de pérdida del objeto.}
+   		 \item{Control del drone: se buscará un objeto y el drone será capaz de seguir dicho objeto de interés durante toda la prueba. Así mismo, deberá localizar el objeto de interés en caso de pérdida del objeto.}
     		\item{Experimentación: tras el desarrollo de ambos algoritmos se pondrán a prueba trabajando ambos a la vez y se validará experimentalmente la solución desarrollada en el drone simulado.}
 	\end{enumerate}
 	
@@ -32,7 +32,7 @@ Se concertaban una reuniones periódicas con el tutor con el cual se discutía los
 	\begin{enumerate}
 		\item {Aprendizaje de JdeRobot y Python: En esta fase se abordan la comprensión de la plataforma de JdeRobot, la instalación del entorno, la interacción con los componentes y la compresión de los mismos para su posterior modificación en función del objetivo deseado. También incluye el aprendizaje de la sintaxis de Python.}
 		\item{Aprendizaje de ICE y Gazebo: Durante este período se aprendió la manera de funcionamiento del interfaz de comunicaciones de ICE así mismo se empezaron a hacer las primeras pruebas con los modelos de Gazebo para comprender mejor ICE y las posibilidades que este tiene.}
-		\item{Aprendizaje de OpenCV: Una vez comprendida la infraestructura a usar se pasó a aprender la herramienta OpenCV, de una manera más específica para el desarrollo del proyecto, aprendiendo a usar filtros de color, detección de puntos y flujo óptico, entre otras sencillas operaciones realizables por esta herramienta.}
+		\item{Aprendizaje de OpenCV: Una vez comprendida la infraestructura a usar se pasó a aprender la biblioteca OpenCV, de una manera más específica para el desarrollo del proyecto, aprendiendo a usar filtros de color, detección de puntos y flujo óptico, entre otras sencillas operaciones realizables por esta biblioteca.}
 		\item{Desarrollo de algoritmos de detección: Gracias al aprendizaje obtenido durante las fases anteriores, se ha procedido a implementar algoritmos de visión, como detección de puntos de interés.}
 		\item {Desarrollo de algoritmos de control: Tomando como punto de partida los datos obtenidos anteriormente, se ha desarrollado unos algoritmos capaces de enviar información precisa al drone para llevar a cabo el seguimiento del objeto, dotándole de autonomía para la toma de decisiones si se encuentra con diferentes situaciones durante las pruebas.}
 		\item{Validación experimental: empleando el entorno simulado, se ha procedido a hacer una serie de pruebas con el fin de detectar posibles comportamientos erróneos en el drone.}
