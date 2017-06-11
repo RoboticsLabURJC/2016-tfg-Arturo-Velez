@@ -252,10 +252,9 @@ class MyAlgorithm(threading.Thread):
 					c, d = f1.ravel()
 					cv2.circle(src2, (a, b), 5, (0, 255, 0), -1)
 					cv2.circle(src2, (c, d), 5, (255, 0, 0), -1)
-					cv2.circle(src2, (int(center[0]), int(center[1])), 10, (255, 255, 255), -1)
+					#cv2.circle(src2, (int(center[0]), int(center[1])), 10, (255, 255, 255), -1)
 					cv2.line(src2, (a, b), (c, d), (0,0,255), 2)
-					cv2.line(src2, (HUD[0][0],HUD[0][1]), (HUD[1][0],HUD[1][1]), (255,255,0), 2)
-					cv2.line(src2, (HUD[2][0],HUD[2][1]), (HUD[3][0],HUD[3][1]), (255,255,0), 2)
+					
 			
 				
 				cv2.rectangle(src2, (np.int0(minX), np.int0(minY)), (np.int0(maxX), np.int0(maxY)), (0,255,0), 2)
