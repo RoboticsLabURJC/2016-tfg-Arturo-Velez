@@ -1,98 +1,201 @@
-\hspace{1 cm} Se han hecho diferentes experimentos con el componente para certificar su correcto funcionamiento, el cual cumple con los objetivos marcados de hacer el seguimiento de un objeto con textura.\\
+\hspace{1 cm} Se han hecho diferentes experimentos con el componente para validar su correcto funcionamiento y que cumple con los objetivos marcados de hacer el seguimiento de un objeto con textura.\\
 
-Así pues, en la versión final del componente el comportamiento habitual consiste en que, tras ejecutar el mundo simulado de pruebas y el componente, se le ordena al drone despegar a través del interfaz diseñado por JdeRobot para el manejo de los componentes.\\
+ Estos experimentos con las diferentes características de las que se compone la versión final son la prueba de que el desarrollo es válido, y que individualmente cada una de sus características funcionan tal y como se espera, es decir, el componente tiene esa información de entrada y se le aplican los métodos necesarios para que a la salida se tenga el resultado esperado.\\
+
+\section{Ejecución típica}
+Así pues, en la versión final del componente el comportamiento habitual consiste en que, tras ejecutar el mundo simulado de pruebas y el componente, se le ordena al drone despegar a través del interfaz gráfico. La aplicación ofrece ese interfaz gráfico para teleoperar el drone o para activar su comportamiento autónomo\\
+
+El objeto de interés para los experimentos, es un robot terrestre que lleva en su parte superior una etiqueta con una imagen con textura. Este robot se teleopera desde otro componente para poderlo mover por el escenario y comprobar que el drone realiza el seguimiento del mismo. En la figura 5.1 se puede ver el robot terrestre con la imagen de una persona vista desde arriba para realizar las pruebas.\\ 
 
 \begin{figure} [H]
   \begin{center}
-    \includegraphics[width=0.5\textwidth]{figuras/teleop.jpg}
+    \includegraphics[width=0.5\textwidth]{figuras/turtlebot.jpg}
   \end{center}
-  \caption{Interfaz de teleoperador}
-  \label{fig:teleop}
+  \caption{Objeto de pruebas}
+  \label{fig:turtlebot}
 \end{figure}
 
-Con el drone en el aire, el método de ordenarle al mismo que empiece la busqueda y seguimiento es a traves del botón play del teleoperador. En este momento el drone empieza a ejecutar simultaneamente la percepción visual y los algoritmos de control, inicialmente la busqueda del objeto.\\
+Con el drone en el aire, el método de ordenarle al mismo que empiece la búsqueda y seguimiento es a través del botón play del teleoperador. En este momento el drone empieza a ejecutar simultáneamente la percepción visual y los algoritmos de control, inicialmente la búsqueda del objeto.\\
 
-\begin{figure} [H]
-  \begin{center}
-    \includegraphics[width=0.7\textwidth]{figuras/insearch.jpg}
+\begin{figure}[h] % indico que voy a poner una figura y [h] indica que la posición relativa, tambien puedo usar t = top entre otros.
+
+\hfill
+\begin{minipage}[t]{.45\textwidth}
+\begin{center}
+    \includegraphics[width=1\textwidth]{figuras/init.jpg}
   \end{center}
-  \caption{Drone buscando objeto}
-  \label{fig:insearch}
+  \caption{Modo de inicio del comportamiento autónomo}
+  \label{fig:init}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{.45\textwidth}
+\begin{center}
+    \includegraphics[width=1\textwidth]{figuras/all0.jpg}
+  \end{center}
+  \caption{Drone en modo búsqueda}
+  \label{fig:all0}
+\end{minipage}
+\hfill
 \end{figure}
 
-Una vez que el objeto aparece en la imagen y el componente lo detecta, comienzan los mecanismos de seguimiento, tanto visual como persecución. En la parte visual se obtienen los puntos soporte, la región de interes y el centro de la misma  para mostrarlos en la interfaz. A su vez el dato del centro del objeto se manda al algoritmo de seguimiento para que este realice su función de persecución.\\
 
-\begin{figure} [H]
-  \begin{center}
-    \includegraphics[width=0.7\textwidth]{figuras/visualspot.jpg}
+Mientras que el drone esta en modo búsqueda se esta desplazando por el escenario trazando una espiral de apertura y de cierre como se ha explicado en el capítulo anterior. Una vez que el objeto aparece en la imagen y el componente lo detecta, comienzan los mecanismos de seguimiento, tanto visual como persecución. En la parte visual se obtienen los puntos soporte, la región de interés y el centro de la misma  para mostrarlos en la interfaz. En la parte de control, el centro calculado en la parte visual se emplea para mover el drone hasta que el centro del objeto se encuentre con el punto central de referencia.\\
+
+\begin{figure}[h] % indico que voy a poner una figura y [h] indica que la posición relativa, tambien puedo usar t = top entre otros.
+
+\hfill
+\begin{minipage}[t]{.45\textwidth}
+\begin{center}
+    \includegraphics[width=1\textwidth]{figuras/found.jpg}
   \end{center}
-  \caption{Objeto localizado y drone persiguiendo}
-  \label{fig:visualspot}
+  \caption{Objeto localizado. Inicio de algoritmos de control.}
+  \label{fig:found}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{.45\textwidth}
+\begin{center}
+    \includegraphics[width=1\textwidth]{figuras/incenter.jpg}
+  \end{center}
+  \caption{Objeto centrado.}
+  \label{fig:incenter}
+\end{minipage}
+\hfill
+\end{figure}
+
+En caso de que el objeto de interés se esté moviendo el drone intentará centrarlo tal y como lo tiene programado, por lo que empezará a perseguir al objeto.\\
+
+\begin{figure}[h] % indico que voy a poner una figura y [h] indica que la posición relativa, tambien puedo usar t = top entre otros.
+
+\hfill
+\begin{minipage}[t]{.45\textwidth}
+\begin{center}
+    \includegraphics[width=1\textwidth]{figuras/move1.jpg}
+  \end{center}
+  \caption{Drone persiguiendo al objeto. Inicio.}
+  \label{fig:move1}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{.45\textwidth}
+\begin{center}
+    \includegraphics[width=1\textwidth]{figuras/move2.jpg}
+  \end{center}
+  \caption{Drone persiguiendo al objeto.}
+  \label{fig:move2}
+\end{minipage}
+\hfill
 \end{figure}
 
 Como se ha explicado anteriormente, en caso de perdida del objeto, el drone volverá al estado de búsqueda.\\
 
-Se realizaron experimentos con diferentes objetos. Debido a la diferencia entre que un objeto tiene más textura que el otro, se puede observar como los puntos soporte obtenidos en el que tiene más textura es mayor que en el otro. El número mostrado es el número de puntos soporte instantáneo.\\
+Se realizaron experimentos con diferentes objetos.\\
 
-\begin{figure} [H]
-  \begin{center}
-    \includegraphics[width=0.7\textwidth]{figuras/hat.jpg}
+\begin{figure}[h] % indico que voy a poner una figura y [h] indica que la posición relativa, tambien puedo usar t = top entre otros.
+
+\hfill
+\begin{minipage}[t]{.45\textwidth}
+\begin{center}
+    \includegraphics[width=0.9\textwidth]{figuras/hat.jpg}
   \end{center}
   \caption{Objeto de prueba: sombrero}
   \label{fig:hat}
-\end{figure}
-
-\begin{figure} [H]
-  \begin{center}
-    \includegraphics[width=0.7\textwidth]{figuras/person.jpg}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{.45\textwidth}
+\begin{center}
+    \includegraphics[width=0.9\textwidth]{figuras/person.jpg}
   \end{center}
   \caption{Objeto de prueba: persona}
   \label{fig:person}
+\end{minipage}
+\hfill
 \end{figure}
 
-Se estuvieron realizando experimentos con una cámara real para desarrollar y comprobar el funcionamiento del algoritmo. El principal uso que se le dio al uso de la cámara real fue para probar que la función Good Features to Track obtenía los puntos correctamente. Gracias a este objeto de prueba se puede comprobar como la función obtiene los puntos principalmente en las esquinas.\\
+Debido a la diferencia entre que un objeto tiene más textura que el otro, como se puede observar en las figuras 5.8 y 5.9, los puntos soporte obtenidos en el que tiene más textura es mayor que en el otro. El número mostrado es el número de puntos soporte instantáneo.\\
 
-\begin{figure} [H]
-  \begin{center}
-    \includegraphics[width=0.7\textwidth]{figuras/goodfeat.jpg}
+
+\section{Seguimiento visual de objetos dentro de una imagen}
+
+Ademas de los experimentos con cámaras simuladas, se estuvieron realizando experimentos con una cámara real para desarrollar y comprobar el funcionamiento del algoritmo y así validar la parte perceptiva del comportamiento global. El principal uso que se le dio al uso de la cámara real fue para probar que la función \texttt{GoodFeaturestoTrack} obtenía los puntos correctamente. Gracias a este objeto de prueba se puede comprobar como la función obtiene los puntos principalmente en las esquinas.\\
+
+
+\begin{figure}[h] % indico que voy a poner una figura y [h] indica que la posición relativa, tambien puedo usar t = top entre otros.
+
+\hfill
+\begin{minipage}[t]{.45\textwidth}
+\begin{center}
+    \includegraphics[width=1\textwidth]{figuras/corners1.jpg}
   \end{center}
-  \caption{Objeto de prueba: cuadricula para Good Features to Track}
-  \label{fig:goodfeat}
-\end{figure}
-
-Comprobado que Good Features to Track funcionaba correctamente, algo que es indispensable para poder calcular el flujo óptico, se paso a experimentar con ese la función encargada de calcular el movimiento de los puntos de la imagen. \\
-
-\begin{figure} [H]
-  \begin{center}
-    \includegraphics[width=0.7\textwidth]{figuras/opticalflow1.jpg}
+  \caption{Objeto de prueba: cuadrícula}
+  \label{fig:corners1}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{.45\textwidth}
+\begin{center}
+    \includegraphics[width=1\textwidth]{figuras/corners2.jpg}
   \end{center}
-  \caption{Objeto de prueba: copo de nieve con flujo óptico}
-  \label{fig:opticalflow1}
+  \caption{Objeto de prueba: imagen de una flor}
+  \label{fig:corners2}
+\end{minipage}
+\hfill
 \end{figure}
 
-Debido a que esta función calculaba bien el movimiento de los puntos por la imagen, se probo que también se calculara correctamente la región de interés dentro de la cual estaría el objeto. Como se ha explicado, la región la define los puntos más extremos del objeto.\\
+Tal y como se muestra en las figuras 5.10 y 5.11, esta función extrae muy bien las esquinas como píxeles interesantes sobre los que hacer el seguimiento visual y consigue buen seguimiento en la imagen sobre esos píxeles.\\
+
+Comprobado que \texttt{GoodFeaturestoTrack} funcionaba correctamente, algo que es indispensable para poder calcular el flujo óptico, se paso a experimentar con la función \texttt{calcOpticalFlowPyrLK} encargada de calcular el movimiento de los puntos de la imagen.\\
+
+\begin{figure}[h] % indico que voy a poner una figura y [h] indica que la posición relativa, tambien puedo usar t = top entre otros.
+\hfill
+\begin{minipage}[t]{.45\textwidth}
+\begin{center}
+    \includegraphics[width=1\textwidth]{figuras/static.jpg}
+  \end{center}
+  \caption{Objeto de prueba: copos de nieve}
+  \label{fig:static}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{.45\textwidth}
+\begin{center}
+    \includegraphics[width=1\textwidth]{figuras/moving.jpg}
+  \end{center}
+  \caption{Objeto de prueba: copos de nieve en movimiento}
+  \label{fig:moving}
+\end{minipage}
+\hfill
+\end{figure}
+
+La función hace el seguimiento de los puntos calculados con un pequeño error pero aceptable para realizar el seguimiento del objeto por la imagen, tal y como se puede apreciar en las figuras 5.12 y 5.13.\\ 
+
+Se probó también que se calcule correctamente la región de interés dentro de la cual estaría el objeto. Como se ha explicado, la región la definen los puntos más extremos del objeto.\\
 
 \begin{figure} [H]
   \begin{center}
-    \includegraphics[width=0.7\textwidth]{figuras/oproireal.jpg}
+    \includegraphics[width=0.7\textwidth]{figuras/roi.jpg}
   \end{center}
   \caption{Objeto de prueba: copo de nieve con región de interés}
-  \label{fig:oproireal}
+  \label{fig:roi}
 \end{figure}
 
-Pese a todo el cálculo de la región de interés no es del todo perfecto, es decir, no toma el valor del punto real más extremo para su definición, pero la aproximación es muy buena con un error muy pequeño.\\
+El cálculo de la región de interés no es del todo perfecto, es decir, no toma el valor del punto real más extremo para su definición, pero la aproximación es muy buena con un error muy pequeño.\\
 
-Se han hecho pruebas seleccionando la región de interés manualmente. Esto consistía en abrir una ventana con la imagen donde el usuario manualmente tenía que trazar un rectángulo sobre el objeto de interés para poder hacer el seguimiento visual.\\
+\section{Detección manual del objeto}
+
+Se han hecho pruebas seleccionando la región de interés manualmente. Esto consistía en abrir una ventana con la imagen donde el usuario manualmente tenía que trazar un rectángulo sobre el objeto de interés para poder hacer el seguimiento visual. Fue reemplazado por la detección completamente automática descrita en el capítulo 4.\\
 
 \begin{figure} [H]
   \begin{center}
-    \includegraphics[width=0.7\textwidth]{figuras/setroi.jpg}
+    \includegraphics[width=0.7\textwidth]{figuras/selectroi.jpg}
   \end{center}
   \caption{Objeto de prueba: copo de nieve seleccionando región de interés}
-  \label{fig:setroi}
+  \label{fig:selectroi}
 \end{figure}
 
-Además de estas pruebas con cámara real, se hicieron otras pruebas en el simulador Gazebo, realizando el seguimiento de un objeto con colores, que como se ha explicado antes basaba su busqueda en si el objeto tenía el color o no. Los valores del color se obtenían de forma experimental y se ajustaba el componente con estos valores para que, a continuacion, la parte perceptiva detectase el objeto y pudiera darle la información necesaria a los algoritmos de control.\\
+\section{Seguimiento desde el drone de objetos de colores}
+
+Además de estas pruebas con cámara real, se hicieron otras pruebas en el simulador Gazebo, realizando el seguimiento de un objeto con colores, que como se ha explicado antes basaba su búsqueda en si el objeto tenía el color relevante o no.\\
+
+Los valores del color se obtenían de forma experimental gracias a la ayuda de un componente de JdeRobot llamado ColorTuner, con el cual se obtenían los valores que marcarían el rango en el espacio de color HSV con el cual se ajustaba el filtro que dejaría pasar los los colores que estén dentro de ese rango, para que, a continuación, la parte perceptiva detectase el objeto y pudiera darle la información necesaria a los algoritmos de control.\\
+
+Esto es útil para simplificar la percepción y poder probar el seguimiento con estos objetos sencillos, antes de usar otros objetos más sofisticados que no tienen algo relevante, sólo textura.\\
 
 \begin{figure} [H]
   \begin{center}
@@ -102,4 +205,4 @@ Además de estas pruebas con cámara real, se hicieron otras pruebas en el simulad
   \label{fig:filtergazebo}
 \end{figure}
 
-Estos experimentos con las diferentes características de las que se compone la versión final, son la prueba de que el desarrollo es válido y que individualmente cada una de sus características funcionan tal y como se espera, es decir, el componente tiene esa información de entrada y se le aplican los métodos necesarios para que a la salida se tenga el resultado esperado.
+Tal y como se aprecia en la figura 5.16, el filtro de color HSV esta ajustado para el color verde. El filtro calcula que valores de la imagen están dentro del rango que esta ajustado y genera la máscara en blanco y negro (parte derecha superior de la figura). Esta máscara se aplica a la imagen, generando una imagen donde solo se puede ver el color que ha sido filtrado.

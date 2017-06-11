@@ -24,5 +24,9 @@
 \contentsline {section}{\numberline {4.2}Percepci\'on visual}{23}{section.4.2}
 \contentsline {section}{\numberline {4.3}Algoritmos de control}{26}{section.4.3}
 \contentsline {chapter}{\numberline {5}Experimentos}{28}{chapter.5}
+\contentsline {section}{\numberline {5.1}Ejecuci\'on t\IeC {\'\i }pica}{28}{section.5.1}
+\contentsline {section}{\numberline {5.2}Seguimiento visual de objetos dentro de una imagen}{31}{section.5.2}
+\contentsline {section}{\numberline {5.3}Detecci\'on manual del objeto}{32}{section.5.3}
+\contentsline {section}{\numberline {5.4}Seguimiento desde el drone de objetos de colores}{33}{section.5.4}
 \contentsline {chapter}{\numberline {6}Conclusiones}{35}{chapter.6}
 \contentsline {section}{\numberline {6.1}Trabajos futuros}{36}{section.6.1}
