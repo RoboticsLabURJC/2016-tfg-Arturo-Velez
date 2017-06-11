@@ -17,13 +17,15 @@
 #       Alberto Martin Florido <almartinflorido@gmail.com>
 #
 
-from PyQt4 import QtGui,QtCore
+from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtWidgets import QWidget, QLabel
+from PyQt5.QtGui import QImage, QPixmap
 
-class ColorFilterWidget(QtGui.QWidget):
+class ColorFilterWidget(QWidget):
     IMAGE_COLS_MAX=640
     IMAGE_ROWS_MAX=360
     
-    imageUpdate=QtCore.pyqtSignal()
+    imageUpdate=pyqtSignal()
     
     def __init__(self,winParent):      
         super(ColorFilterWidget, self).__init__()
@@ -38,58 +40,29 @@ class ColorFilterWidget(QtGui.QWidget):
         self.setMinimumSize(1340,400)
         self.setMaximumSize(1340,400)
 
-        self.imgLabelColor=QtGui.QLabel(self)
+        self.imgLabelColor=QLabel(self)
         self.imgLabelColor.resize(self.IMAGE_COLS_MAX,self.IMAGE_ROWS_MAX)
         self.imgLabelColor.move(20,20)
         self.imgLabelColor.show()
 
-        self.imgLabelBlackWhite=QtGui.QLabel(self)
+        self.imgLabelBlackWhite=QLabel(self)
         self.imgLabelBlackWhite.resize(self.IMAGE_COLS_MAX,self.IMAGE_ROWS_MAX)
         self.imgLabelBlackWhite.move(40 + self.IMAGE_COLS_MAX,20)
         self.imgLabelBlackWhite.show()
 
     def setColorImage(self):
-        img = self.winParent.getSensor().getColorImage()
+        img = self.winParent.getCamera().getColorImage()
 
-        if img != None:
-            image = QtGui.QImage(img.data, img.shape[1], img.shape[0], img.shape[1] * img.shape[2], QtGui.QImage.Format_RGB888)
-            
-            if img.shape[1] == self.IMAGE_COLS_MAX:
-            	x = 20
-            else:
-            	x=(self.IMAGE_COLS_MAX+20)/2-(img.shape[1]/2)
-            	
-            if img.shape[0] == self.IMAGE_ROWS_MAX:
-            	y = 20
-            else:
-	        y=(self.IMAGE_ROWS_MAX+40)/2-(img.shape[0]/2)
-	        
-            size=QtCore.QSize(img.shape[1],img.shape[0])
-            self.imgLabelColor.move(x,y)
-            self.imgLabelColor.resize(size)
-            self.imgLabelColor.setPixmap(QtGui.QPixmap.fromImage(image))          
+        if img is not None:
+            image = QImage(img.data, img.shape[1], img.shape[0], img.shape[1] * img.shape[2], QImage.Format_RGB888)
+            self.imgLabelColor.setPixmap(QPixmap.fromImage(image))
 
     def setThresoldImage(self):
-        img = self.winParent.getSensor().getThresoldImage()
+        img = self.winParent.getCamera().getThresoldImage()
 
-        if img != None:
-            image = QtGui.QImage(img.data, img.shape[1], img.shape[0], img.shape[1], QtGui.QImage.Format_Indexed8)
-            
-            if img.shape[1] == self.IMAGE_COLS_MAX:
-            	x = 40 + self.IMAGE_COLS_MAX
-            else:
-            	x= 40 + self.IMAGE_COLS_MAX + ((self.IMAGE_COLS_MAX+20)/2-(img.shape[1]/2))
-            	
-            if img.shape[0] == self.IMAGE_ROWS_MAX:
-            	y = 20
-            else:
-	        y=(self.IMAGE_ROWS_MAX+40)/2-(img.shape[0]/2)   
-	        
-            size=QtCore.QSize(img.shape[1],img.shape[0])
-            self.imgLabelBlackWhite.move(x,y)
-            self.imgLabelBlackWhite.resize(size)
-            self.imgLabelBlackWhite.setPixmap(QtGui.QPixmap.fromImage(image))     	                 
-           
+        if img is not None:
+            image = QImage(img.data, img.shape[1], img.shape[0], img.shape[1], QImage.Format_Indexed8)
+            self.imgLabelBlackWhite.setPixmap(QPixmap.fromImage(image))
         
     def updateImage(self):
         self.setColorImage()

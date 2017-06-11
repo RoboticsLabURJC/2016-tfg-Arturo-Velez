@@ -30,7 +30,7 @@ href = 0
 velX = 0.0
 velY = 0.0
 velZ = 0.0
-init = False
+
 size = (0,0)
 
 
@@ -117,17 +117,9 @@ class MyAlgorithm(threading.Thread):
 
 	def execute(self):
 		input_image = self.camera.getImage()
-		
-
-			
-		#Check if the vector is longer than a threshold
-		def isVector(point0, point1, i):
-			return (math.sqrt(((point1[i][0][0]-point0[i][0][0])**2)+((point1[i][0][1]-point0[i][0][1])**2))) > 5 and (math.sqrt(((point1[i][0][0]-point0[i][0][0])**2)+((point1[i][0][1]-point0[i][0][1])**2))) < 30
-			
-			 	 
 
 		def setROI():
-			global cut, refPt, init, lin, size
+			global cut, refPt, lin, size
 			
 			frame1 = self.camera.getImage()
 			gray_frame1 = cv2.cvtColor(frame1, cv2.COLOR_BGR2GRAY)
@@ -154,8 +146,6 @@ class MyAlgorithm(threading.Thread):
 					cv2.destroyWindow('ROI SELECTION')
 					cut = True
 					break
-				elif init:
-					break
 				else:
 					continue
 
@@ -167,46 +157,13 @@ class MyAlgorithm(threading.Thread):
 			center[0] = ((xmax + xmin)/2)
 			center[1] = ((ymax + ymin)/2)
 
-		def initROI():
-			global href, refPt, center, cut, refCenter, init
-			velZ = 1
-			z = 1
-			print("init")
-			print(len(refPt))
-			while len(refPt) != 2:
-				print("going high")
-				print(len(refPt))
-				z = z + 1
-				self.cmdvel.sendCMDVel(0, 0, velZ,0,0,0)
-				setROI()
-				if len(refPt) == 2:
-					squareCenter(refPt[1][0], refPt[0][0], refPt[1][1],refPt[0][1])
-			while center != refCenter:
-				print(z)
-				if z>href:
-					velZ = -1
-					z = z - 1
-				elif z<href:
-					velZ = 1
-					z = z + 1
-				else:
-					velZ = 0
-				
-				velX = ((refCenter[0] - center[0])/refCenter[0])
-				velY = ((refCenter[1] - center[1])/refCenter[1])
-				self.cmdvel.sendCMDVel(velY, velX, velZ,0,0,0)	
-			
-			cut = False
-			init = False
-		
 			
 
 		#Optical flow function
 		def flow(image):
-			global opflow_first, previous, unpaired,lin,  refMov, cut,refPt, center, refCenter, HUD, init
-			if init:
-				initROI()
+			global opflow_first, previous, unpaired,lin,  refMov, cut,refPt, center, refCenter, HUD
 			
+			print("SET ROI")
 			setROI()
 			
 			
@@ -219,34 +176,57 @@ class MyAlgorithm(threading.Thread):
 				
 			p0 = cv2.goodFeaturesToTrack(src_gray, 100, 0.01, 10, None, None, 7)
 			index = 0
+
 			
+			print("HAY P0")
 			for i in (p0):
 				if (i[0][0] < refPt[0][0]) or (i[0][0] > refPt[1][0]) or (i[0][1] < refPt[0][1]) or (i[0][1] > refPt[1][1]):
 					p0 = np.delete(p0, index, axis=0)
-					
+				
 				else:
 					index = index + 1
 
-			
+		
 			while(True):
+				print("WHILE")
 				src2 = self.camera.getImage()
-				
+			
 				src2 = cv2.medianBlur(src2, 3)
 				src2_gray = cv2.cvtColor(src2, cv2.COLOR_BGR2GRAY)
 
 				p1, st, err = cv2.calcOpticalFlowPyrLK(src_gray, src2_gray, p0, None,
-                                                   None, None,
-                                                   (30, 30), 2,
-                                                   (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0.03))
+	                                           None, None,
+	                                           (30, 30), 2,
+	                                           (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0.03))
 
+							
+				print("HAY P1")
+				
+				if p1 == None:
+					refPt = []
+					cut = False
+					print(refPt)
+					print(cut)
+					break
 				
 				if len(p1)<5:
+					print("HAY MENOS DE 5 P1")
 					refPt = []
 					cut = False
 					break
-					
+			
+				
 
 				good_p1 = p1[st==1]
+				
+				if len(good_p1) == 0:
+					print("NO GOOD_P1")
+					refPt = []
+					cut = False
+					print(refPt)
+					print(cut)
+					break
+
 				maxAll = np.amax(good_p1, axis = 0)
 				minAll = np.amin(good_p1, axis = 0)
 				maxX = maxAll[0]#[0]
@@ -259,15 +239,15 @@ class MyAlgorithm(threading.Thread):
 				velX = ((refCenter[0] - center[0])/refCenter[0])
 				velY = ((refCenter[1] - center[1])/refCenter[1])
 				print(velX, velY)
-				#self.cmdvel.sendCMDVel(velY, velX, 0,0,0,0)					
-						
+				self.cmdvel.sendCMDVel(velY, velX, 0,0,0,0)					
 				
-				
-				
+		
+		
+		
 			#Max and min point: 0 for x axis, 1 for y axis
-			
+	
 				for i,(f2,f1) in enumerate(zip(p1,p0)):
-					
+			
 					a, b = f2.ravel()
 					c, d = f1.ravel()
 					cv2.circle(src2, (a, b), 5, (0, 255, 0), -1)
@@ -276,12 +256,12 @@ class MyAlgorithm(threading.Thread):
 					cv2.line(src2, (a, b), (c, d), (0,0,255), 2)
 					cv2.line(src2, (HUD[0][0],HUD[0][1]), (HUD[1][0],HUD[1][1]), (255,255,0), 2)
 					cv2.line(src2, (HUD[2][0],HUD[2][1]), (HUD[3][0],HUD[3][1]), (255,255,0), 2)
-					
-						
+			
+				
 				cv2.rectangle(src2, (np.int0(minX), np.int0(minY)), (np.int0(maxX), np.int0(maxY)), (0,255,0), 2)
 				font = cv2.FONT_HERSHEY_SIMPLEX
 				cv2.putText(src2,str(len(p1)), (40,100),font,2,(255,255,255),2)
-			
+	
 				if src2 is not None:
 					self.camera.setColorImage(src2)
 
@@ -290,13 +270,16 @@ class MyAlgorithm(threading.Thread):
 
 				p0 = cv2.goodFeaturesToTrack(src_gray, 100, 0.01, 10, None, None, 7)
 				index2 = 0
+				print("INDEX 2")
 				for p in (p0):
+					
 					if (p[0][0] < (np.int0(minX) -2) or p[0][0] > (np.int0(maxX) +2)) or (p[0][1] < (np.int0(minY)-2) or p[0][1] > (np.int0(maxY)+2)):
 						p0 = np.delete(p0, index2, axis=0)
 					else:
 						index2 = index2 + 1
 
 				if len(p0)<10:
+					print("INDEX 3")
 					cv2.rectangle(src2, (np.int0(minX), np.int0(minY)), (np.copy(maxX), np.int0(maxY)), (0, 255, 0), 2)
 					p0 = cv2.goodFeaturesToTrack(src_gray, 100, 0.01, 10, None, None, 7)
 					index3 = 0
@@ -305,22 +288,14 @@ class MyAlgorithm(threading.Thread):
 							p0 = np.delete(p0, index3, axis=0)
 						else:
 							index3 = index3 + 1
-			
-			
+				
 
 		#Algorythm
 		if input_image != None:
-	
-			res = flow(input_image)
+			print("INPUT YES")
+			flow(input_image)
 
 			
 			
 		
-		if res != None:
-			self.camera.setColorImage(res)
-			
-		
-		
-		#if maskshow != None:
-		#	self.sensor.setThresoldImage(maskshow)
 
