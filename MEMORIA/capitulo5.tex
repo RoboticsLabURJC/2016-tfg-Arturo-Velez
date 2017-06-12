@@ -39,7 +39,7 @@ Con el drone en el aire, el método de ordenarle al mismo que empiece la búsqueda
 \end{figure}
 
 
-Mientras que el drone esta en modo búsqueda se esta desplazando por el escenario trazando una espiral de apertura y de cierre como se ha explicado en el capítulo anterior. Una vez que el objeto aparece en la imagen y el componente lo detecta, comienzan los mecanismos de seguimiento, tanto visual como persecución. En la parte visual se obtienen los puntos soporte, la región de interés y el centro de la misma  para mostrarlos en la interfaz. En la parte de control, el centro calculado en la parte visual se emplea para mover el drone hasta que el centro del objeto se encuentre con el punto central de referencia.\\
+Mientras que el drone esta en modo búsqueda se está desplazando por el escenario trazando una espiral de apertura y de cierre como se ha explicado en el capítulo anterior. Una vez que el objeto aparece en la imagen y el componente lo detecta, comienzan los mecanismos de seguimiento, tanto visual como persecución. En la parte visual se obtienen los puntos soporte, la región de interés y el centro de la misma  para mostrarlos en la interfaz. En la parte de control, el centro calculado en la parte visual se emplea para mover el drone hasta que el centro del objeto se encuentre con el punto central de referencia.\\
 
 \begin{figure}[h] % indico que voy a poner una figura y [h] indica que la posición relativa, tambien puedo usar t = top entre otros.
 
@@ -115,7 +115,7 @@ Debido a la diferencia entre que un objeto tiene más textura que el otro, como s
 
 \section{Seguimiento visual de objetos dentro de una imagen}
 
-Ademas de los experimentos con cámaras simuladas, se estuvieron realizando experimentos con una cámara real para desarrollar y comprobar el funcionamiento del algoritmo y así validar la parte perceptiva del comportamiento global. El principal uso que se le dio al uso de la cámara real fue para probar que la función \texttt{GoodFeaturestoTrack} obtenía los puntos correctamente. Gracias a este objeto de prueba se puede comprobar como la función obtiene los puntos principalmente en las esquinas.\\
+Además de los experimentos con cámaras simuladas, se estuvieron realizando experimentos con una cámara real para desarrollar y comprobar el funcionamiento del algoritmo y así validar la parte perceptiva del comportamiento global. El principal uso que se le dio al uso de la cámara real fue para probar que la función \texttt{GoodFeaturestoTrack} obtenía los puntos correctamente. Gracias a estos objetos de prueba se puede comprobar como la función obtiene los puntos principalmente en las esquinas.\\
 
 
 \begin{figure}[h] % indico que voy a poner una figura y [h] indica que la posición relativa, tambien puedo usar t = top entre otros.
@@ -205,4 +205,4 @@ Esto es útil para simplificar la percepción y poder probar el seguimiento con es
   \label{fig:filtergazebo}
 \end{figure}
 
-Tal y como se aprecia en la figura 5.16, el filtro de color HSV esta ajustado para el color verde. El filtro calcula que valores de la imagen están dentro del rango que esta ajustado y genera la máscara en blanco y negro (parte derecha superior de la figura). Esta máscara se aplica a la imagen, generando una imagen donde solo se puede ver el color que ha sido filtrado.
+Tal y como se aprecia en la figura 5.16, el filtro de color HSV está ajustado para el color verde. El filtro calcula que valores de la imagen están dentro del rango que esta ajustado y genera la máscara en blanco y negro (parte derecha superior de la figura). Esta máscara se aplica a la imagen, generando una imagen donde solo se puede ver el color que ha sido filtrado.
