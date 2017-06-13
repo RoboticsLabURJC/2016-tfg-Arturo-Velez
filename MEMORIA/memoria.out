@@ -21,12 +21,15 @@
 \BOOKMARK [0][-]{chapter.4}{Desarrollo}{}% 21
 \BOOKMARK [1][-]{section.4.1}{Dise\361o}{chapter.4}% 22
 \BOOKMARK [1][-]{section.4.2}{Percepci\363n visual}{chapter.4}% 23
-\BOOKMARK [1][-]{section.4.3}{Algoritmos de control}{chapter.4}% 24
-\BOOKMARK [0][-]{chapter.5}{Experimentos}{}% 25
-\BOOKMARK [1][-]{section.5.1}{Ejecuci\363n t\355pica}{chapter.5}% 26
-\BOOKMARK [1][-]{section.5.2}{Seguimiento visual de objetos dentro de una imagen}{chapter.5}% 27
-\BOOKMARK [1][-]{section.5.3}{Detecci\363n manual del objeto}{chapter.5}% 28
-\BOOKMARK [1][-]{section.5.4}{Seguimiento desde el drone de objetos de colores}{chapter.5}% 29
-\BOOKMARK [0][-]{chapter.6}{Conclusiones y trabajos futuros}{}% 30
-\BOOKMARK [1][-]{section.6.1}{Conclusiones}{chapter.6}% 31
-\BOOKMARK [1][-]{section.6.2}{Trabajos futuros}{chapter.6}% 32
+\BOOKMARK [2][-]{subsection.4.2.1}{Detecci\363n}{section.4.2}% 24
+\BOOKMARK [2][-]{subsection.4.2.2}{Seguimiento visual}{section.4.2}% 25
+\BOOKMARK [2][-]{subsection.4.2.3}{Percepci\363n de objetos por colores llamativos}{section.4.2}% 26
+\BOOKMARK [1][-]{section.4.3}{Algoritmos de control}{chapter.4}% 27
+\BOOKMARK [0][-]{chapter.5}{Experimentos}{}% 28
+\BOOKMARK [1][-]{section.5.1}{Ejecuci\363n t\355pica}{chapter.5}% 29
+\BOOKMARK [1][-]{section.5.2}{Seguimiento visual de objetos dentro de una imagen}{chapter.5}% 30
+\BOOKMARK [1][-]{section.5.3}{Detecci\363n manual del objeto}{chapter.5}% 31
+\BOOKMARK [1][-]{section.5.4}{Seguimiento desde el drone de objetos de colores}{chapter.5}% 32
+\BOOKMARK [0][-]{chapter.6}{Conclusiones y trabajos futuros}{}% 33
+\BOOKMARK [1][-]{section.6.1}{Conclusiones}{chapter.6}% 34
+\BOOKMARK [1][-]{section.6.2}{Trabajos futuros}{chapter.6}% 35

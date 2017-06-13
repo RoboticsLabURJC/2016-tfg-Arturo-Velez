@@ -1,39 +1,35 @@
 
-\hspace{1 cm} En este capítulo se describe la solución diseñada y programada para conseguir los objetivos anteriormente definidos, es decir, el desarrollo de cómo gracias a la cámara embarcada en el drone, en este caso, simulado, es capaz de hacer un procesamiento de la imagen y un control sobre los plugins de Gazebo para realizar la función que se ha planteado.\\
+\hspace{1 cm} En este capítulo se describe la solución diseñada y programada para conseguir los objetivos anteriormente definidos, es decir, del comportamiento autónomo de un drone simulado que es capaz de buscar un objeto de interés, dotado de textura, que se mueve por el suelo y seguirlo, utilizando su cámara a bordo.\\
 
-El desarrollo ha consistido en 3 partes marcadas:
-
-\begin{enumerate}
-\item{Diseño}
-\item{Percepción visual}
-\item{Algoritmos de control}
-\end{enumerate}
+Este capítulo describe primero el diseño del comportamiento y después los detalles de sus dos bloques fundamentales de desarrollo: la percepción visual y al algoritmo de control.\\
 
 \section{Diseño}
-\hspace{1 cm}El diseño del componente desarrollado es muy sencillo. Por un lado se recibe las imágenes desde la cámara del drone y se obtiene una salida en modo de movimiento del drone.\\
+\hspace{1 cm}El diseño del componente desarrollado es muy sencillo. El comportamiento del drone se ha realizado programando un componente de JdeRobot que tiene como entrada imágenes en color, RGB, de resolución 320x240 de la cámara embarcada en el drone descrito en capítulo 3 a través del interfaz \texttt{camera} y como salida es un flujo continuo de órdenes a los motores del drone, a través del interfaz \texttt{cmdVel}. Ambos interfaces se explicarán más adelante.
+
+descrito. 
 
  \begin{figure} [H]
   \begin{center}
-    \includegraphics[width=0.5\textwidth]{figuras/esquebb.jpg}
+    \includegraphics[width=0.8\textwidth]{figuras/esquebb.jpg}
   \end{center}
-  \caption{Esquema básico del diseño del componente}
+  \caption{Diagrama de entradas y salidas del componente}
   \label{fig:esquebb}
 \end{figure}
 
-Por lo tanto basándonos en este esquema, el drone va a tener que ser capaz de tomar imágenes, tratarlas aplicando ciertos algoritmos y con esa información utilizar algoritmos y funciones para poder tener la respuesta apropiada. Aquí es donde se subdivide el problema en dos, parte perceptiva y parte de control:\\
+Basándonos en este esquema, el drone toma imágenes, las trata aplicando ciertos algoritmos y sobre esa información utilizar otros algoritmos y que toman decisiones y generan la respuesta motriz apropiada. Se subdivide el problema del comportamiento autónomo en dos, parte perceptiva y parte de control. La información de la parte perceptiva es: ¿Se ha detectado el objeto a seguir en la imagen?¿Cuál es su posición y su tamaño en la imagen? Sobre esa información, la parte del control toma decisiones del movimiento del drone\\
 
 \begin{figure} [H]
   \begin{center}
-    \includegraphics[width=0.5\textwidth]{figuras/esquemafull.jpg}
+    \includegraphics[width=0.8\textwidth]{figuras/esquecomp.jpg}
   \end{center}
-  \caption{Esquema ampliado del componente}
+  \caption{Diagrama del componente}
   \label{fig:filter}
 \end{figure}
 
 \section{Percepción visual}
-\hspace{1 cm} Esta parte es la parte principal con la que tiene que lidiar el componente. Para obtener la entrada, el componente se conecta al interfaz de comunicaciones ICE mediante la función \texttt{self.camera.getImage()}, esta función se encarga de obtener las imágenes que el interfaz ofrece y este a su vez las puede obtener de diferentes fuentes, en este caso, la obtiene de la cámara del drone simulado de Gazebo.\\
-
-Una vez se obtiene la imagen correctamente, el componente busca en la imagen el objeto de interés. Para ello, tiene un area de búsqueda en la misma y se mantiene en ese estado hasta que el objeto aparece en la imagen.
+\hspace{1 cm} Para obtener la entrada, el componente se conecta al interfaz de comunicaciones ICE mediante la función \texttt{self.camera.getImage()}. Esta función se encarga de obtener las imágenes que el interfaz camera ofrece y este a su vez las puede obtener de diferentes fuentes, en este caso, la obtiene de la cámara del drone simulado de Gazebo. La imagen se pasa a escala de grises para su procesamiento.\\
+\subsection{Detección}
+Una vez se obtiene la imagen correctamente, el componente busca en la imagen el objeto de interés. Para ello, tiene un area de búsqueda en la misma y se mantiene en ese estado hasta que el objeto aparece en la imagen. Este área de búsqueda se encuentra en el area central y su tamaño se ajusta con el tamaño de entrada menos 10 píxeles por cada lado.
 
 \begin{python}[
     basicstyle=\scriptsize, %or \small or \footnotesize etc.
@@ -48,7 +44,7 @@ def setROI():
 	
 \end{python}
 
-Cuando el objeto está en la imagen se inician los algoritmos de búsqueda y seguimiento de puntos. El primero con el que se encuentra es \texttt{cv2.goodFeaturesToTrack()}. Esta función de OpenCV encuentra las N esquinas más fuertes en la imagen por el método Shi-Tomasi. Este método parte de la ecuación $R = min(\lambda_1 , \lambda_2 )$, donde si $R$ esta por encima de un umbral, se considera como una esquina. Como de costumbre, la imagen debe ser una imagen en escala de grises. En la función se especifica el número de esquinas a buscar, el nivel de calidad, que es un valor entre 0-1 e indica la calidad mínima de la esquina debajo de la cual todos son rechazados y por último proveemos la distancia euclidiana mínima entre las esquinas detectadas. También, a modo de hacer más eficiente el código, elimina los puntos que están fuera del objeto.
+El objeto se detecta cuando los puntos característicos del objeto son detectados con la función \texttt{cv2.goodFeaturesToTrack()}. Esta función de OpenCV encuentra las N esquinas más fuertes en la imagen por el método Shi-Tomasi. Este método parte de la ecuación $R = min(\lambda_1 , \lambda_2 )$, donde si $R$ esta por encima de un umbral, se considera como una esquina. Como de costumbre, la imagen debe ser una imagen en escala de grises. En la función se especifica el número de esquinas a buscar, el nivel de calidad, que es un valor entre 0-1 e indica la calidad mínima de la esquina debajo de la cual todos son rechazados y por último proveemos la distancia euclidiana mínima entre las esquinas detectadas. También, a modo de hacer más eficiente el código, elimina los puntos que están fuera del objeto.
 
 \begin{python}[
     basicstyle=\scriptsize, %or \small or \footnotesize etc.
@@ -70,9 +66,19 @@ if p0 != None:
 			index = index + 1
 \end{python}
 
-Entonces, una vez calculados los puntos en el fotograma N, pasa a calcular la posición de los mismos en el fotograma N+1. Partiendo de la suposición de que todos los píxeles vecinos tendrán movimiento similar, se utiliza el método de Lucas-Kanade que toma un parche 3x3 alrededor del punto, así que todos los 9 puntos tienen el mismo movimiento. Podemos encontrar $(f_x , f_y , f_t)$ para estos 9 puntos. Así que ahora nuestro problema se convierte en la solución de 9 ecuaciones.\\ 
+\subsection{Seguimiento visual}
 
-OpenCV soluciona todo esto en una sola función, \texttt{cv2.calcOpticalFlowPyrLK()} que realiza el seguimiento de algunos puntos en un vídeo. La función recibe el fotograma anterior, los puntos anteriores y el fotograma siguiente. Devuelve los puntos siguientes junto con algunos valores de estado que tiene un valor de 1 si se encuentra el siguiente punto, de lo contrario cero. Del mismo modo, la imagen tiene que ser en escala de grises.
+Una vez calculados los puntos en el fotograma N, pasa a calcular la posición de los mismos en el fotograma N+1. Partiendo de la suposición de que todos los píxeles vecinos tendrán movimiento similar, se utiliza el método de Lucas-Kanade que toma un parche 3x3 alrededor del punto, así que todos los 9 puntos tienen el mismo movimiento. Podemos encontrar $(x , y , t)$ para estos 9 puntos, donde x e y son las coordenadas del punto y t el instante de tiempo donde se encuentra el punto. Así que ahora nuestro problema se convierte en la solución de 9 ecuaciones.\\ 
+
+\begin{figure} [H]
+  \begin{center}
+    \includegraphics[width=0.5\textwidth]{figuras/frames.jpg}
+  \end{center}
+  \caption{Posible posición de un punto en el frame siguiente}
+  \label{fig:frame}
+\end{figure}
+
+OpenCV soluciona todo esto en una sola función, \texttt{cv2.calcOpticalFlowPyrLK()} que realiza el seguimiento de algunos puntos en un vídeo. La función recibe el fotograma anterior, los puntos anteriores y el fotograma siguiente. Devuelve los puntos siguientes junto con algunos valores de estado que tiene un valor de 1 si se encuentra el siguiente punto, de lo contrario cero. Del mismo modo, la imagen tiene que ser en escala de grises. Con todo esto, se hace el seguimiento de cada uno de los puntos de interés que componen el objeto.
 
 \begin{python}[
     basicstyle=\scriptsize, %or \small or \footnotesize etc.
@@ -86,9 +92,9 @@ src2_gray = cv2.cvtColor(src2, cv2.COLOR_BGR2GRAY)
 p1, st, err = cv2.calcOpticalFlowPyrLK(src_gray, src2_gray, p0, None, None, None, 30, 30), 2, (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0.03))
 \end{python}
  
-Pero esto no es suficiente para asegurar que los puntos obtenidos son los válidos, porque si estos llevan el esta 0 asignado, no tienen punto emparejado. Por ello, es necesario hacer una comprobación de ese estado para ver cuales puntos están emparejados y cuales no. Esto lo podemos conseguir generando un array donde se van a ir almacenando todos aquellos puntos en los que su estado es 1, es decir, aquellos que están emparejados.\\
+Pero esto no es suficiente para asegurar que los puntos obtenidos son los válidos, porque si estos llevan el esta 0 asignado, no tienen punto emparejado. Por ello, es necesario hacer una comprobación de ese estado para ver cuáles puntos están emparejados y cuales no. Esto lo podemos conseguir generando un array donde se van a ir almacenando todos aquellos puntos en los que su estado es 1, es decir, aquellos que están emparejados con el fotograma previo.\\
 
-Con los puntos válidos, es el momento de definir cuales son los más externos del objeto, lo que ayuda a definir dinámicamente la región de interés dentro de la cual va a estar el objeto.
+Con los puntos válidos, es el momento de definir cuáles son los más externos del objeto, lo que ayuda a definir dinámicamente la región de interés rectangular dentro de la cual va a estar el objeto.
 \begin{python}[
     basicstyle=\scriptsize, %or \small or \footnotesize etc.
 ]
@@ -103,7 +109,7 @@ minX = minAll[0]
 minY = minAll[1]
 \end{python}
 
-Teniendo la región de interés donde esta contenido el objeto, la cual es rectangular, se obtiene el centro de la misma calculando el punto medio de la diagonal que une dos vertices opuestos.
+Teniendo la región de interés donde está contenido el objeto, se obtiene el centro de la misma calculando el punto medio de la diagonal que une dos vértices opuestos.
 \begin{python}[
     basicstyle=\scriptsize, %or \small or \footnotesize etc.
 ]
@@ -115,11 +121,21 @@ def squareCenter(xmax, xmin, ymax, ymin):
 
 Con todo esto el componente es capaz de obtener la posición del objeto dentro del plano de la imagen y poder hacer un seguimiento del mismo durante todo el flujo de fotogramas de manera iterativa.\\
 
-En ocasiones el objeto desaparecerá de la imagen, bien porque sale del plano o bien porque se hace más pequeño. En tal caso, los puntos soporte no podrán ser calculados y por tanto no habrá puntos ``buenos''  para poder realizar el seguimiento dentro de la imagen, por lo que la percepción del componente se reiniciará al modo de búsqueda hasta que el objeto vuelva a aparecer en la imagen o sea posible calcular los puntos.\\
+El seguimiento del objeto se materializa siguiendo todos los puntos constituyentes del objeto entre fotogramas consecutivos. Normalmente ese conjunto de puntos va menguando, cuando cae por debajo de cierto umbral se considera que es un número insuficiente y el componente regresa al estado de detección, lo que le permite redefinir el objeto y recopilar más y nuevos puntos de interés constituyentes.\\
 
-En las versiones iniciales del trabajo de fin de grado se realizaron utilizando imágenes con unas características muy marcadas, como por ejemplo colores fuertes para poder emplear filtros de color. Aquí la percepción tiene unas ligeras modificaciones.\\
+\subsection{Percepción de objetos por colores llamativos}
+
+En las versiones iniciales se detectaban objetos sólo de colores fuertes para poder emplear filtros de color en su detección y seguimiento.\\
 
 En este caso la percepción se basa en colores y, para saber si un objeto es de interés o no, emplea un filtro de color del cual resulta una imagen en blanco y negro donde, si el objeto tiene ese color, aparece en blanco.\\
+
+\begin{figure} [H]
+  \begin{center}
+    \includegraphics[width=0.5\textwidth]{figuras/filter.jpg}
+  \end{center}
+  \caption{Filtrado de colores llamativos}
+  \label{fig:filter}
+\end{figure}
 
 \begin{python}[
     basicstyle=\scriptsize, %or \small or \footnotesize etc.
@@ -146,15 +162,16 @@ centroid_y = int(M['m01']/M['m00'])
 
 
 \section{Algoritmos de control}
-\hspace{1 cm} La otra parte del componente es la encargada de controlar el drone. Para que esto sea posible, el componente hace uso de la función \texttt{self.cmdvel.sendCMDVel()}, la cual conecta con el interfaz de comunicaciones ICE, que es el encargado de mandar la información que la función toma de las velocidades en los ejes X, Y y Z, grado de guiñada e inclinación y la velocidad de giro entorno al eje vertical, al drone.\\
+\hspace{1 cm} La otra parte del componente es la encargada de controlar el drone. Para que esto sea posible, el componente hace uso de la función \texttt{self.cmdvel.sendCMDVel()} del interfaz de comunicaciones ICE, que es la encargada de mandar órdenes de las velocidades en los ejes X, Y y Z, grado de guiñada e inclinación y la velocidad de giro entorno al eje vertical, al drone.\\
 
-Los algoritmos de control se pueden dividir en dos:
+El comportamiento del drone no es el mismo si ha localizado al objeto relevante en imagen o aún no lo ha hecho. Por ello se ha dividido en dos estados con una respuesta motora diferente:
 \begin{enumerate}
-\item{Algoritmos de búsqueda}
-\item{Algoritmos de seguimiento}
+\item{Estado de búsqueda}
+\item{Estado de seguimiento}
 \end{enumerate}
 
-Dentro de los algoritmos de búsqueda, se desarrollaron dos, el primero se basaba en elevarse hasta encontrar el objeto, pero este no era muy util en algunas condiciones puesto que su referencia de altura se obtenía a partir del area de objetos simples. El otro método empleaba un método de búsqueda en espiral, abriendo y cerrando la misma. Los cambios de dirección del drone van dirigidos por tiempo, es decir, durante 1 segundo se mueve en X, durante 2 segundos se mueve en Y, durante 3 segundos en -X, durante 4 segundos en -Y, durante 5 segundos de nuevo en X y así sucesivamente hasta un tiempo definido experimentalmente en función del tamaño del escenario.\\
+\subsection{Comportamiento de búsqueda}
+Dentro del algoritmo de búsqueda, se desarrollaron dos estrategias. La primera se basa en elevarse hasta encontrar el objeto, pero no era muy útil en algunas condiciones puesto que elevándose, abre el campo visual y es mayor la zona en la que puede detectar al objeto, sin embargo si se eleva demasiado el tamaño del objeto en imagen es demasiado pequeño para que sea detectable. La segunda estrategia emplea un método de búsqueda en espiral ``cuadrada'', abriendo el radio de la misma en un plano. Los cambios de dirección del drone van dirigidos por tiempo, es decir, durante 1 segundo se mueve en X, durante 2 segundos se mueve en Y, durante 3 segundos en -X, durante 4 segundos en -Y, durante 5 segundos de nuevo en X y así sucesivamente hasta un tiempo definido experimentalmente en función del tamaño del escenario.\\
 
 Para el tiempo se tiene en cuenta el intervalo de tiempo empleado para una orden y el anterior para poder hacer esa función de abrir y cerrar la espiral:
 \begin{python}[
@@ -200,7 +217,9 @@ def seek()
 	changeDirection()
 \end{python}
 
-Una vez que el objeto esta localizado, se inician los algoritmos de seguimiento. Se obtiene el punto central del objeto desde la parte perceptiva  y se aplica la formula, para calcular la velocidad, $V= (R_c - C)/R_c$, donde $V$ es la velocidad, $R_c$ es el punto de referencia, $C$ es el punto central del objeto, el cual el drone tiene que hacer coincidir con $R_c$.\\
+\subsection{Comportamiento de seguimiento}
+
+Una vez que el objeto esta localizado, se inician los algoritmos de seguimiento. Se obtiene el punto central del objeto desde la parte perceptiva  y se aplica la fórmula, para calcular la velocidad, $V= (R_c - C)/R_c$, donde $V$ es la velocidad, $R_c$ es el punto de referencia, $C$ es el punto central del objeto percibido, el cual el drone tiene que hacer coincidir con $R_c$ que es el centro de la imagen. Es un control proporcional.\\
 \begin{python}[
     basicstyle=\scriptsize, %or \small or \footnotesize etc.
 ]
@@ -211,3 +230,5 @@ self.cmdvel.sendCMDVel(velY, velX, 0,0,0,0)
 \end{python}
 
 Este método pretende siempre tener el objeto en el punto de referencia, es decir, si el objeto se esta desplazando, el algoritmo va a tratar volverlo a poner en el centro, para así tratar de hacer coincidir el centro del objeto con el punto de referencia. Si el drone pierde el objeto, ejecuta de nuevo los algoritmos de búsqueda automática por espiral.\\
+
+Durante ambos estados, la altura del drone se mantiene estable, moviéndose en un plano paralelo al suelo. Además no rota entorno a su eje Z.
