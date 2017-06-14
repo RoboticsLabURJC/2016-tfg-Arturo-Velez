@@ -30,6 +30,7 @@ sec= 1
 secless=0
 init = False
 size = (0,0)
+timeflag=[0,0,0]
 
 
 cut = False
@@ -141,7 +142,7 @@ class MyAlgorithm(threading.Thread):
 		
 		def changeTime():
 			global sec, secless
-			if sec > secless and sec <20:
+			if sec > secless and sec <30:
 				secless = sec
 				sec = sec + 1
 			elif sec < secless + 2 and sec > 2:
@@ -150,9 +151,10 @@ class MyAlgorithm(threading.Thread):
 			else:
 				sec = 1
 				secless = 0
+			
 		
 		def changeDirection():
-			global velX, velY
+			global velX, velY, sec
 			
 			if velX != 0.0 and velY == 0.0:
 				velY = -velX
@@ -160,21 +162,32 @@ class MyAlgorithm(threading.Thread):
 			elif velX == 0.0 and velY != 0.0:
 				velX = velY
 				velY = 0.0 
+			
 		
 		def seek():
-			global velX, velY, sec, secless
+			global velX, velY, sec, secless, timeflag
 			self.cmdvel.sendCMDVel(velY, velX, 0,0,0,0)
-			print ("SLEEPING: " + str(sec) + " SECONDS")
-			time.sleep(sec)
-			changeTime()
-			changeDirection()
+			#print (str(sec) + " SECONDS")
+			#time.sleep(sec)
+			timenow = datetime.now()
+			t = time.mktime(timenow.timetuple())
+		
+			if t == timeflag[2]:
+				changeTime()
+				changeDirection()
+				timeflag = [0,0,0]
+			if t > timeflag[2]:
+				timeflag = [0,0,0]
+				
+				
+			print("AT SEEK: " + str(timeflag) + " WHEN " +  str(sec) + " SECONDS AND " + str(t))		
 				
 		
 
 		#Optical flow function
 		def flow(image):
-			global opflow_first, previous, unpaired,lin,  refMov, cut,refPt, center, refCenter, init
-
+			global opflow_first, previous, unpaired,lin,  refMov, cut,refPt, center, refCenter, init, sec, timeflag
+			print("AT INIT: " + str(timeflag)+ " WHEN " +  str(sec) + " SECONDS")
 			
 			setROI()
 			
@@ -190,7 +203,6 @@ class MyAlgorithm(threading.Thread):
 			
 			index = 0
 			if p0 != None:
-		
 				for i in (p0):
 					if (i[0][0] < refPt[0][0]) or (i[0][0] > refPt[1][0]) or (i[0][1] < refPt[0][1]) or (i[0][1] > refPt[1][1]):
 						p0 = np.delete(p0, index, axis=0)
@@ -215,7 +227,7 @@ class MyAlgorithm(threading.Thread):
 
 										
 						good_p1 = p1[st==1]
-						print("LENGHT GOOD_P1: " + str(len(good_p1)))
+						#print("LENGHT GOOD_P1: " + str(len(good_p1)))
 						
 						if len(good_p1) == 0:
 							maxX = refPt[1][0]
@@ -225,6 +237,11 @@ class MyAlgorithm(threading.Thread):
 							cv2.rectangle(src2, (np.int0(minX), np.int0(minY)), (np.int0(maxX), np.int0(maxY)), (255,0,0), 2)
 							font = cv2.FONT_HERSHEY_SIMPLEX
 							cv2.putText(src2,"All 0", (40,100),font,2,(255,255,255),2)
+							timenow = datetime.now()
+							t = time.mktime(timenow.timetuple())
+							if timeflag[0] == 0 and timeflag[1] == 0:
+								timeflag[0] = 1
+								timeflag[2] = t + sec							
 							seek()
 			
 							if src2 is not None:
@@ -232,7 +249,8 @@ class MyAlgorithm(threading.Thread):
 								self.camera.setColorImage(src2)	
 							break					
 
-						print("NOT BREAK")
+						#print("NOT BREAK")
+						
 						maxAll = np.amax(good_p1, axis = 0)
 						minAll = np.amin(good_p1, axis = 0)
 						maxX = maxAll[0]#[0]
@@ -241,7 +259,7 @@ class MyAlgorithm(threading.Thread):
 						minY = minAll[1]#[1]
 
 						squareCenter(maxX, minX, maxY, minY)
-						print(center)
+						print(center)	
 						velX = ((refCenter[0] - center[0])/refCenter[0])
 						velY = ((refCenter[1] - center[1])/refCenter[1])
 						print(velX, velY)
@@ -266,6 +284,9 @@ class MyAlgorithm(threading.Thread):
 						cv2.rectangle(src2, (np.int0(minX), np.int0(minY)), (np.int0(maxX), np.int0(maxY)), (0,255,0), 2)
 						font = cv2.FONT_HERSHEY_SIMPLEX
 						cv2.putText(src2,str(len(p1)), (40,100),font,2,(255,255,255),2)
+						timeflag = [0,0,0]
+						sec = 1
+						secless = 0
 			
 						if src2 is not None:
 							self.camera.setColorImage(src2)
@@ -275,21 +296,23 @@ class MyAlgorithm(threading.Thread):
 
 						p0 = cv2.goodFeaturesToTrack(src_gray, 100, 0.01, 10, None, None, 7)
 						index2 = 0
-						for p in (p0):
-							if (p[0][0] < (np.int0(minX) -2) or p[0][0] > (np.int0(maxX) +2)) or (p[0][1] < (np.int0(minY)-2) or p[0][1] > (np.int0(maxY)+2)):
-								p0 = np.delete(p0, index2, axis=0)
-							else:
-								index2 = index2 + 1
-
-						if len(p0)<10:
-							cv2.rectangle(src2, (np.int0(minX), np.int0(minY)), (np.copy(maxX), np.int0(maxY)), (0, 255, 0), 2)
-							p0 = cv2.goodFeaturesToTrack(src_gray, 100, 0.01, 10, None, None, 7)
-							index3 = 0
-							for g in (p0):
-								if ((g[0][0] < (minX - 20)) or (g[0][0] > (maxX + 20))) or ((g[0][1] < (minY - 20)) or (g[0][1] > (maxY + 20))):
-									p0 = np.delete(p0, index3, axis=0)
+						if p0 != None:
+							for p in (p0):
+								if (p[0][0] < (np.int0(minX) -2) or p[0][0] > (np.int0(maxX) +2)) or (p[0][1] < (np.int0(minY)-2) or p[0][1] > (np.int0(maxY)+2)):
+									p0 = np.delete(p0, index2, axis=0)
 								else:
-									index3 = index3 + 1
+									index2 = index2 + 1
+
+							if len(p0)<10:
+								print("INDEX 3")
+								cv2.rectangle(src2, (np.int0(minX), np.int0(minY)), (np.copy(maxX), np.int0(maxY)), (0, 255, 0), 2)
+								p0 = cv2.goodFeaturesToTrack(src_gray, 100, 0.01, 10, None, None, 7)
+								index3 = 0
+								for g in (p0):
+									if ((g[0][0] < (minX - 20)) or (g[0][0] > (maxX + 20))) or ((g[0][1] < (minY - 20)) or (g[0][1] > (maxY + 20))):
+										p0 = np.delete(p0, index3, axis=0)
+									else:
+										index3 = index3 + 1
 					else:
 						maxX = refPt[1][0]
 						maxY = refPt[1][1]
@@ -298,14 +321,37 @@ class MyAlgorithm(threading.Thread):
 						cv2.rectangle(src2, (np.int0(minX), np.int0(minY)), (np.int0(maxX), np.int0(maxY)), (255,0,0), 2)
 						font = cv2.FONT_HERSHEY_SIMPLEX
 						cv2.putText(src2,"All 0", (40,100),font,2,(255,255,255),2)
+						timenow = datetime.now()
+						t = time.mktime(timenow.timetuple())
+						if timeflag[0] == 0 and timeflag[1] == 0:
+							#print("SECOND FLAG")
+							timeflag[1] = 1
+							timeflag[2] = t + sec						
 						seek()
 			
 						if src2 is not None:
 							print("SHOWIIING")
 							self.camera.setColorImage(src2)	
 						break						
-						
+			else:
+				maxX = refPt[1][0]
+				maxY = refPt[1][1]
+				minX = refPt[0][0]
+				minY = refPt[0][1]
+				cv2.rectangle(src, (np.int0(minX), np.int0(minY)), (np.int0(maxX), np.int0(maxY)), (255,0,0), 2)
+				font = cv2.FONT_HERSHEY_SIMPLEX
+				cv2.putText(src,"All 0", (40,100),font,2,(255,255,255),2)
+				timenow = datetime.now()
+				t = time.mktime(timenow.timetuple())
+				if timeflag[0] == 0 and timeflag[1] == 0:
+					#print("SECOND FLAG")
+					timeflag[1] = 1
+					timeflag[2] = t + sec						
+				seek()
 
+				if src is not None:
+					print("NOOOOOO")
+					self.camera.setColorImage(src)	
 				
 		#Algorythm
 		if input_image != None:
