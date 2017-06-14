@@ -26,6 +26,8 @@
 \contentsline {subsection}{\numberline {4.2.2}Seguimiento visual}{24}{subsection.4.2.2}
 \contentsline {subsection}{\numberline {4.2.3}Percepci\'on de objetos por colores llamativos}{26}{subsection.4.2.3}
 \contentsline {section}{\numberline {4.3}Algoritmos de control}{27}{section.4.3}
+\contentsline {subsection}{\numberline {4.3.1}Comportamiento de b\'usqueda}{28}{subsection.4.3.1}
+\contentsline {subsection}{\numberline {4.3.2}Comportamiento de seguimiento}{29}{subsection.4.3.2}
 \contentsline {chapter}{\numberline {5}Experimentos}{30}{chapter.5}
 \contentsline {section}{\numberline {5.1}Ejecuci\'on t\IeC {\'\i }pica}{30}{section.5.1}
 \contentsline {section}{\numberline {5.2}Seguimiento visual de objetos dentro de una imagen}{33}{section.5.2}

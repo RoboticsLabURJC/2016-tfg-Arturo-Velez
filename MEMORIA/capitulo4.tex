@@ -205,16 +205,22 @@ def changeDirection():
 		velY = 0.0 
 \end{python}
 
-Todo ello gobernado por la función que gestiona el paso del tiempo y lanza la orden de cambio de dirección y aumento del tiempo:
+Todo ello gobernado por la función que gestiona el aumento de los intervalos de tiempo y los cambios de dirección. Esta función utiliza un variable global que contiene el instante de tiempo donde se tiene que realizar el cambio de dirección. Ese instante de tiempo se genera en el algoritmo tras un cambio de dirección al reiniciar el estado de la variable a cero, y por lo tanto, al estar en ese estado, se imprime dentro de esta variable global la duración del intervalo de tiempo correspondiente al siguiente movimiento más el tiempo actual, de modo que así se indica cuándo hay que realizar el cambio de dirección:
 \begin{python}[
     basicstyle=\scriptsize, %or \small or \footnotesize etc.
 ]
 def seek()
 	global velX, velY, sec, secless
 	self.cmdvel.sendCMDVel(velY, velX, 0,0,0,0)
-	time.sleep(sec)
-	changeTime()
-	changeDirection()
+	timenow = datetime.now()
+	t = time.mktime(timenow.timetuple())
+		
+	if t == timeflag[2]:
+		changeTime()
+		changeDirection()
+		timeflag = [0,0,0]
+	if t > timeflag[2]:
+		timeflag = [0,0,0]
 \end{python}
 
 \subsection{Comportamiento de seguimiento}
