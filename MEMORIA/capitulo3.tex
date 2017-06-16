@@ -1,29 +1,20 @@
-\hspace{1 cm}Para el desarrollo de este trabajo de fin de grado se ha empleado la plataforma del proyecto JdeRobot de software libre y software de terceros para de este modo poder adaptar la infraestructura disponible a las condiciones ideales y creación de contenido para la correcta ejecución de los algoritmos creados.
+\hspace{1 cm}Para el desarrollo de este trabajo de fin de grado se ha empleado la plataforma del proyecto JdeRobot de software libre y software de terceros para la correcta ejecución de los algoritmos creados.
 
 \section{Sistema operativo virtualizado}
-\hspace{1 cm} Con la mejora de las redes actuales, y la velocidad que estas ofrecen cada vez más se están utilizando las tecnologías conocidas como ``cloud'' o ``en la nube''. Este tipo de tecnologías consisten en una virtualización de las máquinas en centros de datos con servidores muy potentes y con múltiples replicaciones de las mismas para mayor seguridad de los datos en caso de catástrofe. Entre las empresas que ofrecen este servicio podemos encontrar Microsoft o Amazon, las cuales te permiten crear desde máquinas muy simples a maquinas tremendamente potentes capaces de procesar grandes cantidades de información.\\
+\hspace{1 cm} Con la mejora de las redes actuales, y la velocidad que éstas ofrecen cada vez más se están utilizando las tecnologías conocidas como ``\textit{cloud}'' o ``en la nube''. Este tipo de tecnologías consisten en una virtualización de las máquinas en centros de datos con servidores muy potentes y con múltiples replicaciones de las mismas para mayor seguridad de los datos en caso de catástrofe. Entre las empresas que ofrecen este servicio podemos encontrar Microsoft o Amazon, las cuales te permiten crear desde máquinas muy simples a máquinas tremendamente potentes capaces de procesar grandes cantidades de información.\\
 
-En el caso de este proyecto, la virtualización se ha hecho localmente, en un disco duro externo y una copia de seguridad en un disco duro exactamente igual, con el objetivo de, en caso de destrucción parcial o total de la unidad, que haya una copia exacta en otro lugar para salvar la perdida de información. Además, se ha diseñado la infraestructura de manera que cualquiera de las replicas de la maquina virtual, pueda ser arrancada en cualquier máquina física, con el único requisito de que esta tenga instalado el programa apropiado para poder arrancar la maquina virtual.\\
+En el caso de este proyecto, la virtualización se ha hecho localmente, en un disco duro externo. Se ha diseñado la infraestructura de manera que la imagen pueda ser arrancada en cualquier máquina física. Para el desarrollo del trabajo de fin de grado se precisaba de un sistema operativo Ubuntu y la máquina empleada ha sido una computadora Apple MacBook Pro con procesador Intel Core i5 de 2,4 GHz, 8GB de memoria RAM y tarjeta gráfica Intel Iris de 1,5 GB de VRAM y todo ello con un sistema operativo Mac OS 10.12 siendo necesaria la aplicación Parallels Desktop 11.0.2 para la virtualización, dotando a la maquina virtual de 4GB de memoria RAM y 256MB de VRAM, inicialmente corriendo Ubuntu 14.04 y posteriormente 16.04.\\
 
-Concretamente, la máquina empleada en este caso, ha sido una computadora Apple MacBook Pro con procesador Intel Core i5 de 2,4 GHz, 8GB de memoria RAM y tarjeta gráfica Intel Iris de 1,5 GB de VRAM y todo ello con un sistema operativo Mac OS 10.12. Para la virtualización de la maquina se ha empleado la aplicación Parallels Desktop 11.0.2, dotando a la maquina virtual de 4GB de memoria RAM y 256MB de VRAM.\\
-
-Durante la realización del proyecto hubo una descontinuación del soporte de Parallels Desktop 11.0.2 con Ubuntu 16.04, siendo necesario la migración de la máquina virtual creada en ese software a otro software llamado VirtualBox en su versión 5.1.14 y posteriormente una nueva migración a una máquina física por motivos de rendimiento. Esta máquina contaba con un procesador Intel Pentium Dual Core a 2.0 Ghz, 3GB de memoria RAM y 128MB de VRAM.\\
+Durante la realización del proyecto hubo una descontinuación del soporte de Parallels Desktop 11.0.2 con Ubuntu 16.04, siendo necesario la migración una máquina física. Esta máquina contaba con un procesador Intel Pentium Dual Core a 2.0 Ghz, 3GB de memoria RAM y 128MB de VRAM.\\
 
 \section{Gazebo}
-\hspace{1 cm}La simulación de robots es una herramienta esencial en la caja de herramientas de un desarrollador de robots. Un simulador bien diseñado permite probar rápidamente algoritmos, diseñar robots y realizar pruebas de regresión utilizando escenarios realistas.
-\begin{figure} [H]
-  \begin{center}
-    \includegraphics[width=0.5\textwidth]{figuras/gazebo.jpg}
-  \end{center}
-  \caption{Logo de Gazebo}
-  \label{fig:gazebo}
-\end{figure}
+\hspace{1 cm}La simulación de robots es una herramienta esencial en la caja de herramientas de un desarrollador de software para robots. Un simulador bien diseñado permite probar rápidamente algoritmos, diseñar robots y realizar pruebas utilizando escenarios realistas.\\
 
-	Gazebo ofrece la capacidad de simular de forma precisa, realista y eficiente poblaciones de robots en entornos complejos de interior y exterior. Utiliza un  robusto motor de física, gráficos de alta calidad y cómodas interfaces gráficas.\\
+	Gazebo\footnote{http://gazebosim.org/} es un simulador 3D de software libre que ofrece la capacidad de simular de forma precisa, realista y eficiente poblaciones de robots en entornos complejos de interior y exterior. Utiliza un  robusto motor de física, gráficos de alta calidad y cómodas interfaces gráficas.\\
 	
 \begin{figure} [H]
   \begin{center}
-    \includegraphics[width=0.5\textwidth]{figuras/robotgazebo.jpg}
+    \includegraphics[width=0.7\textwidth]{figuras/robotgazebo.jpg}
   \end{center}
   \caption{Mundo simulado en Gazebo}
   \label{fig:robotgazebo}
@@ -31,12 +22,10 @@ Durante la realización del proyecto hubo una descontinuación del soporte de Para
 
 	Gracias a que hay una cantidad importante de robots y objetos diseñados, se puede realizar todo tipo de pruebas de algoritmos de una manera muy próxima a la realidad pero sin la complejidad de necesitar un hardware para realizar las pruebas.\\
 	
-	La última versión en la que se ha trabajado en la realización del trabajo es la 7.4, y en esta versión es donde se ha realizado la experimentación para validar así los algoritmos desarrollados.\\
+	La última versión en la que se ha trabajado en la realización de este trabajo es la 7.4, y en esta versión es donde se ha realizado la experimentación para validar los algoritmos desarrollados.\\
 		
 \subsection{ARDrone}
-\hspace{1 cm}El modelo empleado para el desarrollo del proyecto ha sido el AR.Drone de la marca Parrot, o más bien su modelo en el entorno de simulación Gazebo.\\
-
-	Este modelo es un drone recreativo de uso civil que fue diseñado originalmente para  ser controlado desde un dispositivo iOs o Android, pero posteriormente Parrot liberó los applet de control bajo código abierto.\\
+\hspace{1 cm}El modelo empleado para el desarrollo del proyecto ha sido el AR.Drone de la marca Parrot, o más bien su modelo en el entorno de simulación Gazebo. Este es un drone recreativo de uso civil que fue diseñado originalmente para  ser controlado desde un dispositivo iOs o Android, pero posteriormente Parrot liberó los applet de control bajo código abierto.\\
 	
 \begin{figure}[h] % indico que voy a poner una figura y [h] indica que la posición relativa, tambien puedo usar t = top entre otros.
 
@@ -66,11 +55,11 @@ Durante la realización del proyecto hubo una descontinuación del soporte de Para
 		\item{Cámara con sensor CMOS de alta velocidad de lente diagonal. 64° de amplitud. Resolución 176x144 píxeles. Respuesta en Frecuencia: 60 cuadros/s.}
 	\end{itemize}
 	
-	Estas características se han implementado en el simulador Gazebo con la generación de los drivers en JdeRobot, siendo estos los empleados para la ejecución del trabajo de fin de grado. Este modelo desarrollado para el simulador de entornos virtuales sigue de manera fidedigna el comportamiento, peso y manejo del modelo original pero de una manera simulada.
+	Estas características se han implementado en el simulador Gazebo con la generación de los drivers en JdeRobot, siendo éstos los empleados en este trabajo de fin de grado. El modelo desarrollado para el simulador de entornos virtuales sigue de manera fidedigna el comportamiento, peso y manejo del modelo original pero de una manera simulada.
 
 
 \section{JdeRobot}
-\hspace{1 cm}JdeRobot es la plataforma del laboratorio de Robótica de la Universidad Rey Juan Carlos. Es un entorno para el desarrollo de aplicaciones domóticas, robóticas y de visión artificial que se rige por los términos de la licencia GNU GPL versión 3. La arquitectura de JdeRobot está orientada a componentes que funcionan de manera independiente para llevar a cabo tareas complejas. Hay componentes que sensan la realidad y envían los datos a otros componentes que analizan los datos recibidos. La comunicación entre los citados componentes se realiza mediante interfaces ICE, que nos abstraen de la implementación de las comunicaciones.\\
+\hspace{1 cm}JdeRobot\footnote{http://jderobot.org/} es la plataforma del laboratorio de Robótica de la Universidad Rey Juan Carlos. Es un entorno para el desarrollo de aplicaciones domóticas, robóticas y de visión artificial que se rige por los términos de la licencia GNU GPL versión 3. JdeRobot está orientada a componentes que funcionan de manera independiente para llevar a cabo tareas complejas. Hay componentes que sensan la realidad y envían los datos a otros componentes que analizan los datos recibidos. La comunicación entre los citados componentes se realiza mediante interfaces ICE, que abstraen de la implementación de las comunicaciones.\\
 
 \begin{figure}[h] % indico que voy a poner una figura y [h] indica que la posición relativa, tambien puedo usar t = top entre otros.
 
@@ -100,15 +89,21 @@ Durante la realización del proyecto hubo una descontinuación del soporte de Para
 \item{Las bibliotecas, que facilitan el desarrollo con funcionalidades complejas.}
 \end{enumerate}
 
-	Internamente los componentes se puede dividir en dos grupos: los drivers, proporcionan los flujos de datos en bruto y las herramientas que analizan estos datos e implementan la funcionalidad final. Un ejemplo es cameraserver que recibe las imágenes de la cámara y las sirve en la red a la herramienta cameraview que las muestra e indica los fotogramas por segundo del vídeo recibido. Yendo un paso más existe el componente followturtlebot, el que ha servido como base para la realización del trabajo. Este componente contiene parte de visión y parte de control, sirviendo perfectamente de punto de partida para el desarrollo de los objetivos. Este componente incluye un interfaz gráfico donde se puede dar órdenes al drone, permite visualizar la cámara y los datos de los diferentes sensores y además incluye la opción de ver el procesamiento que se ha realizado sobre la imagen. El uso de este componente ha sido posible gracias a la utilización de cameraserver como servidor de imágenes. Es una herramienta muy útil que provee imágenes de una cámara, de un fichero o de un flujo de datos en línea, lo que facilita las cosas ya que con unos sencillos cambios en un fichero de configuración obtendremos las imágenes deseadas. Otro componente que cabe destacar es OpenCVDemo, gracias al cual ha sido posible la compresión de los métodos empleados para el desarrollo de los objetivos, ya que incluye funciones básicas de la biblioteca OpenCV, la cual se explicará más adelante.\\
+	Internamente los componentes se puede dividir en dos grupos: los drivers, proporcionan los flujos de datos en bruto y las herramientas que analizan estos datos e implementan la funcionalidad final. Un ejemplo es \texttt{cameraserver} que recibe las imágenes de la cámara y las sirve en la red a la herramienta \texttt{cameraview} que las muestra e indica los fotogramas por segundo del vídeo recibido.\\
+	
+	 Yendo un paso más existe el componente \texttt{followturtlebot}, que ha servido como base para la realización del trabajo. Este componente contiene parte de visión y parte de control, sirviendo de punto de partida para el desarrollo de los objetivos. Este componente incluye un interfaz gráfico donde se puede dar órdenes al drone, permite visualizar la cámara y los datos de los diferentes sensores y además incluye la opción de ver el procesamiento que se ha realizado sobre la imagen.\\
+	 
+	  El uso de este componente ha sido posible gracias a la utilización de \texttt{cameraserver} como servidor de imágenes. Es un driver muy útil que provee imágenes de una cámara, de un fichero o de un flujo de datos en línea, lo que facilita las cosas ya que con unos sencillos cambios en el fichero de configuración obtendremos las imágenes deseadas.\\
+	  
+	   Otro componente que cabe destacar es OpenCVDemo, que incluye funciones básicas de la biblioteca OpenCV, la cual se explicará más adelante.\\
 
 	Durante el desarrollo del trabajo de fin de grado se han llevado a cabo diferentes actualizaciones de la infraestructura de JdeRobot. La última versión empleada ha sido la 5.5.\\
 	
-\section{Bibliotecas}
+
 \hspace{1 cm}El lenguaje empleado en este trabajo de fin de grado es Python. Para el desarrollo de los algoritmos se han empleado fundamentalmente dos blibliotecas o paquetes que permiten a este lenguaje que realice las operaciones necesarias para el correcto funcionamiento del proyecto, además de emplear una biblioteca de comunicaciones para conectar los componentes. Estas son OpenCV, Numpy y ICE. 
 
-\subsection{Biblioteca de comunicaciones: ICE}
-\hspace{1 cm}ICE o Internet Communication Engine es un middleware orientado a objetos con soporte para diversos lenguajes de programación: C++, .NET, Java, Python, ObjetiveC, Ruby y PHP. ICE provee de objetos orientados a RPC, computación distribuida y servicios de publicación/suscripción. Es desarrollado por Zeroc y tiene una licencia dual: bajo una licencia privativa y bajo GNU GPL. Se encuentra disponible en la mayoría de los sistemas operativos actuales y tiene también una versión reducida para entornos móviles.\\
+\section{Biblioteca de comunicaciones: ICE}
+\hspace{1 cm}ICE\footnote{https://zeroc.com/products/ice} o Internet Communication Engine es un middleware orientado a objetos con soporte para diversos lenguajes de programación: C++, .NET, Java, Python, ObjetiveC, Ruby y PHP. ICE provee de objetos orientados a RPC, computación distribuida y servicios de publicación/suscripción. Es desarrollado por Zeroc y tiene una licencia dual: bajo una licencia privativa y bajo GNU GPL. Se encuentra disponible en la mayoría de los sistemas operativos actuales y tiene también una versión reducida para entornos móviles.\\
 
 \begin{figure} [H]
   \begin{center}
@@ -118,10 +113,12 @@ Durante la realización del proyecto hubo una descontinuación del soporte de Para
   \label{fig:ice}
 \end{figure}
 
-	ICE proporciona la abstracción de la implementación de la capa de comunicaciones a través de la red. Gracias a esto es posible la comunicación remota con cámaras que proveen imágenes o con otros componentes de JdeRobot. Estas interfaces se encuentran definidas en un lenguaje SLICE o Specification language for ICE que puede ser compilado en varios lenguajes de programación diferentes, permitiendo el desarrollo multilenguaje de aplicaciones.
+	ICE proporciona la abstracción de la implementación de la capa de comunicaciones a través de la red. Gracias a esto es posible la comunicación remota con cámaras que proveen imágenes o con otros componentes de JdeRobot. Estas interfaces se encuentran definidas en un lenguaje SLICE o Specification language for ICE que puede ser compilado en varios lenguajes de programación diferentes, permitiendo el desarrollo multilenguaje de aplicaciones.\\
+	
+	Se ha utilizado la versión 3.6. La aplicación desarrollada en este trabajo de fin de grado se comunica con el driver del robot simulado en Gazebo usando ICE.
 
-\subsection{OpenCV}
-\hspace{1 cm}OpenCV es una biblioteca libre de visión artificial originalmente desarrollada por Intel. Desde que apareció su primera versión alfa en el mes de enero de 1999, se ha utilizado en infinidad de aplicaciones. Desde sistemas de seguridad con detección de movimiento, hasta aplicaciones de control de procesos donde se requiere reconocimiento de objetos. Esto se debe a que su publicación se da bajo licencia BSD, que permite que sea usada libremente para propósitos comerciales y de investigación con las condiciones en ella expresadas.\\
+\section{OpenCV}
+\hspace{1 cm}OpenCV\footnote{opencv.org} es una biblioteca libre de visión artificial originalmente desarrollada por Intel. Desde que apareció su primera versión alfa en el mes de enero de 1999, se ha utilizado en infinidad de aplicaciones. Desde sistemas de seguridad con detección de movimiento, hasta aplicaciones de control de procesos donde se requiere reconocimiento de objetos. Esto se debe a que su publicación se da bajo licencia BSD, que permite que sea usada libremente para propósitos comerciales y de investigación con las condiciones en ella expresadas.\\
 
 \begin{figure} [H]
   \begin{center}
@@ -133,19 +130,19 @@ Durante la realización del proyecto hubo una descontinuación del soporte de Para
 
 	Open CV es multiplataforma, existiendo versiones para GNU/Linux, Mac OS X y Windows. Contiene más de 500 funciones que abarcan una gran gama de áreas en el proceso de visión.\\
 	
-	Esta escrito en C/C ++, la biblioteca puede aprovechar el procesamiento multi-core. Habilitando OpenCL, puede aprovechar la aceleración de hardware de la plataforma empleada. OpenCV tiene más de 47 mil personas en la comunidad de usuarios y el número estimado de descargas más de 9 millones. Los usos van desde el arte interactivo hasta la inspección de minas, mapas en la web o la robótica avanzada.\\
+	Esta escrita en C/C ++, la biblioteca puede aprovechar el procesamiento multi-core. Habilitando OpenCL, puede aprovechar la aceleración de hardware de la plataforma empleada. OpenCV tiene más de 47 mil personas en la comunidad de usuarios y el número estimado de descargas más de 9 millones. Los usos van desde el arte interactivo hasta la inspección de minas, mapas en la web o la robótica avanzada.\\
 	
-	Gracias ha esta biblioteca se han podido conseguir los objetivos de percepción visual, ya que las funciones de las cuales dispone esta biblioteca permiten hacer operaciones sobre las imágenes obtenidas por nuestro drone y obtener así una serie de datos muy útiles para el desarrollo de los mecanismos de control. La versión utilizada para el desarrollo del trabajo de fin de grado es la 3.2.0.
+	Gracias ha esta biblioteca se han podido conseguir los objetivos de percepción visual, ya que las funciones de las cuales dispone permiten hacer operaciones sobre las imágenes obtenidas por nuestro drone y obtener así una serie de datos útiles para los mecanismos de control. La versión utilizada para el desarrollo del trabajo de fin de grado es la 3.2.0.
 	
-\subsection{NumPy}
-\hspace{1 cm}NumPy es el paquete fundamental para la computación científica con Python. Contiene entre otras cosas:
+\section{NumPy}
+\hspace{1 cm}NumPy\footnote{http://www.numpy.org/} es el paquete fundamental para la computación científica con Python. Contiene entre otras cosas:
 \begin{itemize}
 	\item {Manipulación de arrays de N dimensiones.}
 	\item{Herramientas para integrar código C / C ++ y Fortran.}
 	\item{Capacidad de manipulación de álgebra lineal, transformada de Fourier y números aleatorios.}
 \end{itemize}
 
-	Además de sus usos científicos, NumPy también puede ser utilizado como un eficiente contenedor multidimensional de datos genéricos y se pueden definir tipos de datos arbitrarios, esto permite a NumPy integrarse de forma transparente y rápida con una amplia variedad de bases de datos.\\
+	Además de sus usos científicos, NumPy también puede ser utilizado como un eficiente contenedor multidimensional de datos genéricos y se pueden definir tipos de datos arbitrarios, esto permite a NumPy integrarse de forma transparente y rápida con una amplia variedad de bases de datos. NumPy se licencia bajo la licencia de BSD, permitiendo la reutilización con pocas restricciones.\\
 	
 \begin{figure} [H]
   \begin{center}
@@ -155,7 +152,7 @@ Durante la realización del proyecto hubo una descontinuación del soporte de Para
   \label{fig:numpy}
 \end{figure}
 
-	NumPy se licencia bajo la licencia de BSD, permitiendo la reutilización con pocas restricciones.\\
 	
-	Esta biblioteca, en su versión 1.12.1, ha sido utilizada para complementar a OpenCV y poder así simplificar algunos de los algoritmos empleados en el trabajo de fin de grado.
+	
+	Esta biblioteca, en su versión 1.12.1, ha sido utilizada para complementar a OpenCV y así simplificar algunos de los algoritmos empleados en el trabajo de fin de grado.
 	

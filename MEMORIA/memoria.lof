@@ -1,46 +1,45 @@
 \select@language {spanish}
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {1.1}{\ignorespaces Preprocesamiento para reducci\'on de ruido.}}{2}{figure.1.1}
-\contentsline {figure}{\numberline {1.2}{\ignorespaces Coche aut\'onomo y los datos que procesa.}}{4}{figure.1.2}
-\contentsline {figure}{\numberline {1.3}{\ignorespaces Acceso a parking mediante OCR.}}{5}{figure.1.3}
+\contentsline {figure}{\numberline {1.2}{\ignorespaces Coche aut\'onomo y los datos que procesa, incluyendo im\'agenes}}{4}{figure.1.2}
+\contentsline {figure}{\numberline {1.3}{\ignorespaces Acceso a parking mediante OCR.}}{4}{figure.1.3}
 \contentsline {figure}{\numberline {1.4}{\ignorespaces Termoimagen para detecci\'on de puntos calientes}}{5}{figure.1.4}
 \contentsline {figure}{\numberline {1.5}{\ignorespaces Proyecto MagicEye del Instituto Polit\'ecnico de Guarda}}{5}{figure.1.5}
 \contentsline {figure}{\numberline {1.6}{\ignorespaces Cuadric\'optero, drone con cuatro motores.}}{6}{figure.1.6}
-\contentsline {figure}{\numberline {1.7}{\ignorespaces Dron MQ-1 Predator equipado para ataque.}}{7}{figure.1.7}
+\contentsline {figure}{\numberline {1.7}{\ignorespaces Drone MQ-1 Predator equipado para ataque.}}{6}{figure.1.7}
 \contentsline {figure}{\numberline {1.8}{\ignorespaces Amazon Prime Air: proceso de aterrizaje}}{7}{figure.1.8}
 \contentsline {figure}{\numberline {1.9}{\ignorespaces Intel Asctec Firefly: c\'amaras y detr\'as, mapa creado}}{7}{figure.1.9}
-\contentsline {figure}{\numberline {1.10}{\ignorespaces Campeonato de Drones de JdeRobot}}{10}{figure.1.10}
+\contentsline {figure}{\numberline {1.10}{\ignorespaces Campeonato de Drones de JdeRobot}}{9}{figure.1.10}
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {3.1}{\ignorespaces Logo de Gazebo}}{15}{figure.3.1}
-\contentsline {figure}{\numberline {3.2}{\ignorespaces Mundo simulado en Gazebo}}{15}{figure.3.2}
-\contentsline {figure}{\numberline {3.3}{\ignorespaces ArDrone de Parrot}}{16}{figure.3.3}
-\contentsline {figure}{\numberline {3.4}{\ignorespaces ArDrone simulado en Gazebo}}{16}{figure.3.4}
-\contentsline {figure}{\numberline {3.5}{\ignorespaces Logo del grupo de rob\'otica de la Universidad Rey Juan Carlos}}{17}{figure.3.5}
-\contentsline {figure}{\numberline {3.6}{\ignorespaces Logo de JdeRobot}}{17}{figure.3.6}
-\contentsline {figure}{\numberline {3.7}{\ignorespaces Arquitectura de cliente y servidor de ICE}}{19}{figure.3.7}
-\contentsline {figure}{\numberline {3.8}{\ignorespaces Logo de OpenCV}}{19}{figure.3.8}
-\contentsline {figure}{\numberline {3.9}{\ignorespaces Logo de Numpy}}{20}{figure.3.9}
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Mundo simulado en Gazebo}}{15}{figure.3.1}
+\contentsline {figure}{\numberline {3.2}{\ignorespaces ArDrone de Parrot}}{16}{figure.3.2}
+\contentsline {figure}{\numberline {3.3}{\ignorespaces ArDrone simulado en Gazebo}}{16}{figure.3.3}
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Logo del grupo de rob\'otica de la Universidad Rey Juan Carlos}}{17}{figure.3.4}
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Logo de JdeRobot}}{17}{figure.3.5}
+\contentsline {figure}{\numberline {3.6}{\ignorespaces Arquitectura de cliente y servidor de ICE}}{18}{figure.3.6}
+\contentsline {figure}{\numberline {3.7}{\ignorespaces Logo de OpenCV}}{19}{figure.3.7}
+\contentsline {figure}{\numberline {3.8}{\ignorespaces Logo de Numpy}}{20}{figure.3.8}
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Diagrama de entradas y salidas del componente}}{22}{figure.4.1}
-\contentsline {figure}{\numberline {4.2}{\ignorespaces Diagrama del componente}}{23}{figure.4.2}
-\contentsline {figure}{\numberline {4.3}{\ignorespaces Posible posici\'on de un punto en el frame siguiente}}{25}{figure.4.3}
-\contentsline {figure}{\numberline {4.4}{\ignorespaces Filtrado de colores llamativos}}{27}{figure.4.4}
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Diagrama de entradas y salidas del componente}}{21}{figure.4.1}
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Diagrama del componente}}{22}{figure.4.2}
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Posible posici\'on de un punto en el frame siguiente}}{24}{figure.4.3}
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Filtrado de colores llamativos}}{26}{figure.4.4}
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {5.1}{\ignorespaces Objeto de pruebas}}{31}{figure.5.1}
-\contentsline {figure}{\numberline {5.2}{\ignorespaces Modo de inicio del comportamiento aut\'onomo}}{31}{figure.5.2}
-\contentsline {figure}{\numberline {5.3}{\ignorespaces Drone en modo b\'usqueda}}{31}{figure.5.3}
-\contentsline {figure}{\numberline {5.4}{\ignorespaces Objeto localizado. Inicio de algoritmos de control.}}{32}{figure.5.4}
-\contentsline {figure}{\numberline {5.5}{\ignorespaces Objeto centrado.}}{32}{figure.5.5}
-\contentsline {figure}{\numberline {5.6}{\ignorespaces Drone persiguiendo al objeto. Inicio.}}{32}{figure.5.6}
-\contentsline {figure}{\numberline {5.7}{\ignorespaces Drone persiguiendo al objeto.}}{32}{figure.5.7}
-\contentsline {figure}{\numberline {5.8}{\ignorespaces Objeto de prueba: sombrero}}{32}{figure.5.8}
-\contentsline {figure}{\numberline {5.9}{\ignorespaces Objeto de prueba: persona}}{32}{figure.5.9}
-\contentsline {figure}{\numberline {5.10}{\ignorespaces Objeto de prueba: cuadr\IeC {\'\i }cula}}{33}{figure.5.10}
-\contentsline {figure}{\numberline {5.11}{\ignorespaces Objeto de prueba: imagen de una flor}}{33}{figure.5.11}
-\contentsline {figure}{\numberline {5.12}{\ignorespaces Objeto de prueba: copos de nieve}}{34}{figure.5.12}
-\contentsline {figure}{\numberline {5.13}{\ignorespaces Objeto de prueba: copos de nieve en movimiento}}{34}{figure.5.13}
-\contentsline {figure}{\numberline {5.14}{\ignorespaces Objeto de prueba: copo de nieve con regi\'on de inter\'es}}{34}{figure.5.14}
-\contentsline {figure}{\numberline {5.15}{\ignorespaces Objeto de prueba: copo de nieve seleccionando regi\'on de inter\'es}}{35}{figure.5.15}
-\contentsline {figure}{\numberline {5.16}{\ignorespaces Objeto de prueba: robot terrestre con colores}}{36}{figure.5.16}
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Objeto de pruebas}}{30}{figure.5.1}
+\contentsline {figure}{\numberline {5.2}{\ignorespaces Modo de inicio del comportamiento aut\'onomo}}{30}{figure.5.2}
+\contentsline {figure}{\numberline {5.3}{\ignorespaces Drone en modo b\'usqueda}}{30}{figure.5.3}
+\contentsline {figure}{\numberline {5.4}{\ignorespaces Objeto localizado. Inicio de algoritmos de control.}}{31}{figure.5.4}
+\contentsline {figure}{\numberline {5.5}{\ignorespaces Objeto centrado.}}{31}{figure.5.5}
+\contentsline {figure}{\numberline {5.6}{\ignorespaces Drone persiguiendo al objeto. Inicio.}}{31}{figure.5.6}
+\contentsline {figure}{\numberline {5.7}{\ignorespaces Drone persiguiendo al objeto.}}{31}{figure.5.7}
+\contentsline {figure}{\numberline {5.8}{\ignorespaces Objeto de prueba: sombrero}}{31}{figure.5.8}
+\contentsline {figure}{\numberline {5.9}{\ignorespaces Objeto de prueba: persona}}{31}{figure.5.9}
+\contentsline {figure}{\numberline {5.10}{\ignorespaces Objeto de prueba: cuadr\IeC {\'\i }cula}}{32}{figure.5.10}
+\contentsline {figure}{\numberline {5.11}{\ignorespaces Objeto de prueba: imagen de una flor}}{32}{figure.5.11}
+\contentsline {figure}{\numberline {5.12}{\ignorespaces Objeto de prueba: copos de nieve}}{33}{figure.5.12}
+\contentsline {figure}{\numberline {5.13}{\ignorespaces Objeto de prueba: copos de nieve en movimiento}}{33}{figure.5.13}
+\contentsline {figure}{\numberline {5.14}{\ignorespaces Objeto de prueba: copo de nieve con regi\'on de inter\'es}}{33}{figure.5.14}
+\contentsline {figure}{\numberline {5.15}{\ignorespaces Objeto de prueba: copo de nieve seleccionando regi\'on de inter\'es}}{34}{figure.5.15}
+\contentsline {figure}{\numberline {5.16}{\ignorespaces Objeto de prueba: robot terrestre con colores}}{35}{figure.5.16}
 \addvspace {10\p@ }

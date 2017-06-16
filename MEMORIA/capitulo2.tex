@@ -1,40 +1,38 @@
-\hspace{1 cm} Una vez expuesto el contexto en el que se realiza este trabajo fin de grado, en el presente capítulo se detallan los objetivos concretos y requisitos de la aplicación, así como la metodología y el plan de trabajo realizados. 
+\hspace{1 cm} Una vez expuestas la motivación y el contexto en el que se realiza este trabajo fin de grado, en el presente capítulo se detallan los objetivos concretos y requisitos de la aplicación, así como la metodología y el plan de trabajo realizados. 
 \section{Descripción del problema}
-\hspace{1 cm}El objetivo global de este trabajo de fin de grado es diseñar y programar una aplicación para que un drone pueda realizar un seguimiento de objetos con textura que se mueven por una superficie. Este seguirá un objeto detectado inicialmente acorde a lo programado. El algoritmo será capaz de manejar un robot cudricóptero desarrollado en un entorno simulado en 3D.\\
+\hspace{1 cm}El objetivo global de este trabajo de fin de grado es diseñar y programar una aplicación para que un drone pueda realizar un seguimiento de objetos con textura que se mueven por el suelo. Éste detectará y realizará un seguimiento visual y físico del objeto. El algoritmo se validará experimentalmente con un robot cudricóptero en un entorno simulado en 3D.\\
 	
 Este objetivo general se ha articulado en tres subobjetivos:
 	\begin{enumerate}
-    		\item{Percepción visual: el algoritmo será capaz de detectar objetos de interés captados mediante una cámara y aplicando las diferentes técnicas de detección y emparejamiento de puntos para conseguir un mecanismo de control correcto.}
-   		 \item{Control del drone: se buscará un objeto y el drone será capaz de seguir dicho objeto de interés durante toda la prueba. Así mismo, deberá localizar el objeto de interés en caso de pérdida del objeto.}
-    		\item{Experimentación: tras el desarrollo de ambos algoritmos se pondrán a prueba trabajando ambos a la vez y se validará experimentalmente la solución desarrollada en el drone simulado.}
+    		\item{Percepción visual: el algoritmo será capaz de detectar objetos de interés captados mediante una cámara y aplicando las diferentes técnicas de emparejamiento de puntos para seguir visualmente dentro del flujo de imágenes al mismo objeto.}
+   		 \item{Control del drone: una vez detectado e identificado el objeto en las imágenes, el drone elegirá sus movimientos para perseguir los desplazamientos en el suelo de ese objeto móvil. Así mismo, deberá buscar y localizar el objeto de interés en caso de pérdida del objeto.}
+    		\item{Experimentación: tras el desarrollo de ambos algoritmos se pondrán a prueba trabajando a la vez y se validará experimentalmente la solución desarrollada en el drone simulado.}
 	\end{enumerate}
 	
 \section{Requisitos}
 \hspace{1cm}Los objetivos anteriormente descritos guiarán la realización del proyecto. La solución desarrollada además debería cumplir con los siguientes requisitos:
 \begin{itemize}
-	\item El algoritmo tendrá que ser válido para su funcionamiento en JdeRobot 5.5 y Gazebo 7.4.
-	\item Será necesario un procesamiento rápido y vivaz del flujo de imágenes.
+	\item El algoritmo funcionará con JdeRobot 5.5 y Gazebo 7.4.
+	\item El procesamiento del flujo de imágenes ha de ser rápido y vivaz.
 	\item El algoritmo tendrá que ser robusto para minimizar los errores.
-	\item Los resultados deberán ser válidos para diferentes tipos de objetos de interés.
+	\item Los resultados deberán funcionar correctamente para diferentes tipos de objetos de interés.
 \end{itemize} 
 
 \section{Metodología}
-\hspace{1 cm} La metodología seguida se ha compuesto de varías herramientas empleadas para un avance seguro y constante en el desarrollo de los algoritmos.\\
+\hspace{1 cm} La metodología seguida se ha compuesto de varias herramientas empleadas para un avance seguro y constante en la programación de los algoritmos. El modo de trabajo ha seguido el desarrollo en espiral donde se iban alcanzando unos hitos para el correcto desarrollo de trabajo. Se buscaba el cierre de versiones por hito, de manera que hasta que una versión no estaba terminada y probada, no se pasaba al siguiente hito.\\
 
-El modo de trabajo ha seguido el desarrollo en espiral donde se iban alcanzando unos hitos para el correcto desarrollo de trabajo. Se buscaba el cierre de versiones por hito, de manera que hasta que una versión no estaba desarrollada y probada, no se pasaba al siguiente hito.\\
+Cuando la versión era estable, se filmaba el resultado y se creaba una entrada en el cuaderno de bitácora\footnote{http://jderobot.org/Avelez-tfg}, el cual es público y se puede encontrar la página dedicada al trabajo de la plataforma JdeRobot. Además, desde el principio del desarrollo se ha utilizado un repositorio en la conocida herramienta Github\footnote{https://github.com/RoboticsURJC-students/2016-tfg-Arturo-Velez}.\\
 
-Cuando la versión era estable, se filmaba el resultado y se creaba una entrada en el cuaderno de bitácora, el cual es público y se puede encontrar la página dedicada al trabajo de la plataforma JdeRobot\footnote{http://jderobot.org/Avelez-tfg}. Además, desde el principio del desarrollo se ha utilizado un repositorio en la conocida herramienta Github.\\
-
-Se concertaban una reuniones periódicas con el tutor con el cual se discutía los problemas que se había tenido durante la ejecución del hito y se establecía un nuevo hito o se proseguía con los mismos hasta conseguir la resolución del problema y completar lo marcado.
+Tambien se concertaban una reuniones periódicas con el tutor con el cual se discutía los problemas que se había tenido durante la ejecución del hito y se establecía un nuevo hito o se proseguía con los mismos hasta conseguir la resolución del problema y completar lo marcado.
 
 \section{Plan de trabajo}
 \hspace{1 cm}Los principales pasos seguidos durante el desarrollo del presente trabajo han sido:
 	\begin{enumerate}
 		\item {Aprendizaje de JdeRobot y Python: En esta fase se abordan la comprensión de la plataforma de JdeRobot, la instalación del entorno, la interacción con los componentes y la compresión de los mismos para su posterior modificación en función del objetivo deseado. También incluye el aprendizaje de la sintaxis de Python.}
-		\item{Aprendizaje de ICE y Gazebo: Durante este período se aprendió la manera de funcionamiento del interfaz de comunicaciones de ICE así mismo se empezaron a hacer las primeras pruebas con los modelos de Gazebo para comprender mejor ICE y las posibilidades que este tiene.}
-		\item{Aprendizaje de OpenCV: Una vez comprendida la infraestructura a usar se pasó a aprender la biblioteca OpenCV, de una manera más específica para el desarrollo del proyecto, aprendiendo a usar filtros de color, detección de puntos y flujo óptico, entre otras sencillas operaciones realizables por esta biblioteca.}
-		\item{Desarrollo de algoritmos de detección: Gracias al aprendizaje obtenido durante las fases anteriores, se ha procedido a implementar algoritmos de visión, como detección de puntos de interés.}
-		\item {Desarrollo de algoritmos de control: Tomando como punto de partida los datos obtenidos anteriormente, se ha desarrollado unos algoritmos capaces de enviar información precisa al drone para llevar a cabo el seguimiento del objeto, dotándole de autonomía para la toma de decisiones si se encuentra con diferentes situaciones durante las pruebas.}
+		\item{Aprendizaje de ICE y Gazebo: Durante este período se aprendió la manera de funcionamiento del interfaz de comunicaciones de ICE. Así mismo se empezaron a hacer las primeras pruebas con los modelos de Gazebo para comprender mejor ICE y las posibilidades que éste tiene.}
+		\item{Aprendizaje de la biblioteca OpenCV: se estudió de una manera más profunda para el desarrollo del proyecto, aprendiendo a usar filtros de color, detección de puntos y flujo óptico, entre otras sencillas operaciones realizables por esta biblioteca.}
+		\item{Desarrollo de algoritmos de percepción: Gracias al aprendizaje obtenido durante las fases anteriores, se ha procedido a implementar algoritmos de visión, como detección y emparejamiento de puntos de interés.}
+		\item {Desarrollo de algoritmos de control: Tomando como punto de partida los datos obtenidos anteriormente, se ha desarrollado unos algoritmos capaces de gobernar el movimiento del drone para llevar a cabo el seguimiento del objeto, dotándole de autonomía para la toma de decisiones si se encuentra con diferentes situaciones durante las pruebas.}
 		\item{Validación experimental: empleando el entorno simulado, se ha procedido a hacer una serie de pruebas con el fin de detectar posibles comportamientos erróneos en el drone, corregirlos y validar el desarrollo.}
 	\end{enumerate}
 	

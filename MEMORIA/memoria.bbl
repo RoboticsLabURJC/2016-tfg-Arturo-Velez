@@ -1,0 +1,29 @@
+\begin{thebibliography}{}
+
+\bibitem[\protect\citeauthoryear{Cano}{2016}]{jorge}
+Jorge Cano.
+\newblock Building of an uav: from the hardware to the driver and autonomous
+  applications.
+\newblock {\em Proyecto Fin de Carrera, URJC}, 2016.
+
+\bibitem[\protect\citeauthoryear{Florido}{2014}]{alberto}
+Alberto~Martín Florido.
+\newblock Navegación visual en un cuadricóptero para el seguimiento de objetos.
+\newblock {\em Proyecto Fin de Carrera, URJC}, 2014.
+
+\bibitem[\protect\citeauthoryear{Martínez}{2016}]{aitor}
+Aitor Martínez.
+\newblock Tecnologías web en plataforma robótica jderobot.
+\newblock {\em Proyecto Fin de Carrera, URJC}, 2016.
+
+\bibitem[\protect\citeauthoryear{Rodríguez}{2016}]{ivan}
+Iván Rodríguez.
+\newblock Manejo de un drone con webrtc y jderobot.
+\newblock {\em Proyecto Fin de Carrera, URJC}, 2016.
+
+\bibitem[\protect\citeauthoryear{Yagüe}{2015}]{daniel}
+Daniel Yagüe.
+\newblock Cuadricóptero ar.drone en gazebo y jderobot.
+\newblock {\em Proyecto Fin de Carrera, URJC}, 2015.
+
+\end{thebibliography}
